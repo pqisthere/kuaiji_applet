@@ -1,0 +1,24 @@
+/** index.wxss **/
+
+/** 用户信息样式 **/
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/** 用户头像样式 **/
+.userinfo-avatar {
+  width: 230rpx;
+  height: 230rpx;
+  margin-top: 90rpx;
+  border-radius: 50%;
+  background-size: cover;
+}
+
+/** 用户昵称样式 **/
+.userinfo-nickname {
+  color: #333333;
+  margin: 20rpx 0 15rpx 0;
+}
+

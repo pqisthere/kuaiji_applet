@@ -1,0 +1,50 @@
+<!-- 手账页 handBook.wxml>index.wxml -->
+
+<!-- 导入底部模板 -->
+<import src="../../common/foot.wxml" />
+
+<!-- 页面容器 -->
+<view class="container">
+  <!-- 页面头部 -->
+  <view class="page-head">本账单共花费 {{sum}} 元</view>
+  <!-- 页面主体：包括主要内容，新增按钮 -->
+  <view class="page-body">
+    <!-- 主要内容区域 -->
+    <view class="index-bd">
+      <!-- 可滑动区域（注解看思考.txt>10） -->
+      <view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{sublist}}" wx:key="id">
+        <!-- 点击跳转到详情页，navigator定义了可点击跳转区域 -->
+        <navigator url="../detail/detail?mainindex={{mainindex}}&subindex={{index}}&act=edit&subtitle={{item.subtitle}}&comment={{item.comment}}&cost={{item.cost}}&date={{item.date}}&time={{item.time}}&typeindex={{item.typeindex}}" class="navigator">
+          <!-- 消费信息-->
+          <view class="navigator-text">
+            <!-- 消费日期 -->
+            <view class="navigator-time">{{item.date}}</view>
+            <!-- 消费类型 -->
+            <view class="navigator-text1">{{typelist[item.typeindex].title}}</view>
+            <!-- item.typeindex当前项在消费类型列表中的索引
+            根据当前消费项目的类型索引 来获取 对应的消费类型标题 -->
+            <!-- 消费名称 -->
+            <view class="navigator-text2">{{item.subtitle}}</view>
+            <!-- 消费金额 -->
+            <view class="navigator-text3">-{{item.cost}}</view>
+          </view>
+          <!-- 删除操作 -->
+          <view class="del" catchtap="del" data-index="{{index}}">删除</view>
+          <!-- 通过 data-index 属性传递了一个名为 index 的变量值，这个值是在渲染组件时动态传递的。在点击事件触发时，可以通过 event.currentTarget.dataset.index 来获取到这个值，用于标识当前点击的是哪个元素，通常用于处理列表中的项 -->
+        </navigator>
+        <!-- </view> -->
+      </view>
+    </view>
+
+    <!-- 新增一笔支出按钮 -->
+    <view>
+      <navigator url="../detail/detail?mainindex={{mainindex}}&act=new">
+        <image class="float-action2" src="../../common/icon/add.png"></image>
+      </navigator>
+    </view>
+
+  </view>
+
+  <!-- 底部模板 -->
+  <template is="foot" />
+</view>

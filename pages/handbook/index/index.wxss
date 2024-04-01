@@ -1,0 +1,40 @@
+/* 消费信息整体 */
+.navigator-text {
+  /* border: green 1px solid; */
+  display: flex;
+  width: 100%;
+}
+
+.navigator-time,
+.navigator-text1,
+.navigator-text2,
+.navigator-text3{
+  /* border: red 1px solid; */
+  margin-right: 15rpx;
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden; /* 隐藏溢出部分 */
+  text-overflow: ellipsis; /* 文本溢出时显示省略号 */
+}
+
+/* 消费日期 */
+.navigator-time {
+  font-size: 25rpx;
+  color: #8D86E6;
+  margin-top: 10rpx;
+}
+
+/* 消费类型 */
+.navigator-text1 {
+  color: #a85060;
+  flex: 1;
+}
+
+/* 消费名称 */
+.navigator-text2 {
+  flex: 1.5;
+}
+
+/* 消费金额 */
+.navigator-text3 {
+  flex: 2;
+}

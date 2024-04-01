@@ -1,0 +1,47 @@
+/* 除了提交重置按钮的其他所有 */
+.page-section {
+  /* border: blueviolet 1px solid; */
+  padding-left: 30rpx;
+}
+
+/* 设置“消费了啥” */
+.page-section:first-child {
+  margin-top: 50rpx;
+}
+
+/* 选中的消费类型按钮 */
+.selected_button {
+  background-color: #8D86E6;
+  color: white;
+}
+
+/* 让年月日和时分并排 */
+.weui-cell__bd {
+  display: flex;
+  align-items: center;
+}
+
+/* 单元格标题样式*/
+.weui-cells__title {
+  color: rgb(128, 128, 128);
+  /* border: solid 1px black; */
+}
+
+/* 所有的输入框 */
+.weui-cell_input {
+  border-bottom: rgb(128, 128, 128) 0.05px solid;
+  /* border: solid 1px black; */
+  width: 95%;
+  display: flex;
+  padding: 10rpx 0;
+  margin: 10rpx 0;
+  /* 将上下padding和margin都设置为 10rpx，左右保持默认值（0）*/
+}
+
+/* 按钮 */
+.btn-area {
+  margin-top: 60rpx;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 30rpx;
+}

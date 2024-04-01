@@ -1,0 +1,75 @@
+<!-- 有头像的主页面，index.wxml -->
+
+<!-- 导入底部模板 -->
+<import src="../common/foot.wxml" />
+
+<!-- 主容器 -->
+<view class="container">
+
+  <!-- 用户信息:头像,昵称 -->
+  <view class="userinfo">
+    <image class="userinfo-avatar" src="../common/icon/院徽.png"></image>
+    <text class="userinfo-nickname">PQ的小账本</text>
+  </view>
+
+  <!-- 弹窗1：“＋”新建一个账目 -->
+  <view>
+    <modal title="新建一个账目" hidden="{{modalHidden1}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm1" bindcancel="modalBindcancel1">
+      <input name='title' bindblur="setTitle" placeholder="取个名儿" value="{{temptitle}}">
+      </input>
+    </modal>
+  </view>
+  <!-- 
+    <modal>模态框组件，用于在页面上显示一个模态对话框
+    modalHidden1 的值为 true 时，模态框隐藏
+    bindconfirm 和 bindcancel 属性分别绑定确认和取消按钮的点击事件处理函数
+    input输入框  name输入框的名称
+    bindblur当用户在输入框输入完内容后，点击 输入框外部 或者 按下"确认" ，
+    导致输入框失去焦点时，就会触发bindblur绑定的事件处理函数
+  -->
+
+  <!-- 弹窗2：“左滑”账目重命名 -->
+  <view>
+    <modal title="账目重命名" hidden="{{modalHidden2}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm2" bindcancel="modalBindcancel2">
+      <input name='title' bindblur="setTitle" value="{{temptitle}}">
+      </input>
+    </modal>
+  </view>
+
+  <!-- 页面主体：包括主要内容，新增按钮，设置按钮 -->
+  <view class="page-body">
+
+    <!-- 主要内容区域 -->
+    <view class="index-bd">
+      <!-- 可滑动区域（注解看思考.txt>10） -->
+      <view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{list}}" wx:key="index">
+        <!-- 点击跳转到该账目的index，navigator定义了可点击跳转区域 -->
+        <navigator url="../handbook/index/index?index={{index}}" class="navigator">
+          <!-- 账目标题 -->
+          <view class="navigator-text">{{item.title}}</view>
+          <!-- 重命名按钮 -->
+          <view class="rename" catchtap="showModal2" data-index="{{index}}">重命名</view>
+          <!-- 删除按钮 -->
+          <view class="del" catchtap="del" data-index="{{index}}">删除</view>
+          <!-- 用户点击触发del事件处理函数，catchtap用于捕获事件，会阻止事件向上冒泡，避免影响到父元素，否则点击删除会冒泡，变成点进该账目 -->
+        </navigator>
+      </view>
+    </view>
+
+    <!-- 新增按钮 -->
+    <view bindtap="showModal1">
+      <image class="float-action2" src="../common/icon/add.png" ></image>
+    </view>
+    <!-- 设置按钮 -->
+    <view>
+      <navigator url="../settings/settings">
+        <image class="float-action" src="../common/icon/setting.png"></image>
+      </navigator>
+    </view>
+
+  </view>
+
+  <!-- 底部模板 -->
+  <template is="foot" />
+
+</view>

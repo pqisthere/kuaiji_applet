@@ -1,0 +1,157 @@
+/**app.wxss**/
+page {
+  background-color: #F8F8F8;
+  height: 100%;
+  width: 100%;
+  font-size: 34rpx;
+  line-height: 1.6;
+  /* border: solid 1px red; */
+}
+
+/* 整个页面的容器 */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  justify-content: space-between;
+  
+  /* border: solid 1px red; */
+}
+
+/* 页头 */
+.page-head {
+  font-size: 37rpx;
+  padding: 20rpx 90rpx;
+  text-align: center;
+}
+
+/* 页面主体：头像下面的区域，页头下面的区域 */
+.page-body {
+  flex-grow: 1;
+  /* 设置 Flex 布局中项目的放大比例的属性。决定项目在父容器中分配剩余空间的比例
+  默认值为0，表示项目不放大。
+  当设置为 1 时，表示该项目可以扩展以填充剩余空间
+  如果容器中有多个具有相同 flex-grow 值的项目，它们将会平均分配剩余的空间
+  如果其中一个子元素的 flex-grow 值比其他子元素的值大，那么它将获得更多的可用空间*/
+  /* border: blue 1px solid; */
+}
+
+/* 主要内容区域 */
+.index-bd {
+  padding: 10rpx;
+  /* border: blueviolet 1px solid; */
+}
+
+/* 可点击区域,包括按钮 */
+.navigator{
+  /* border: solid 1px blue; */
+  padding-left: 20rpx;
+  width: 100%;
+  height: 80rpx;
+  background: rgb(240, 239, 239);
+  border-bottom: 0.4px solid rgb(128, 128, 128);
+  overflow: hidden;
+  /* 因为在index-bd中设置了padding，如果不hidden的话，会露出一点按钮 */
+  display: flex;
+  align-items: center;
+  /* 标题上下居中 */
+  position: relative;
+  /* 父元素相对定位 */
+}
+
+/* 页脚 */
+.page-foot {
+  margin-bottom: 40rpx;
+  text-align: center;
+  color: #8D86E6;
+}
+
+/* 圆形按钮:新增,设置 */
+.float-action,
+.float-action2 {
+  position: fixed;
+  right: 13%;
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 50%;
+  /* 水平偏移,垂直偏移,模糊半径,阴影颜色 */
+  box-shadow: 7rpx 7rpx 10rpx #AAA;
+  /* 堆叠顺序 */
+  z-index: 100;
+  /* 透明度 */
+  opacity: 0.8;
+}
+
+/* 新增“➕”按钮 */
+.float-action2 {
+  bottom: 33%;
+}
+
+/* 点击“➕”，图标变透明 */
+.float-action2 :active {
+  opacity: 0.7;
+  /* 设置透明度，数值范围为0-1，0为完全透明，1为完全不透明
+  navigator会自带0.7的透明度，所以只需要设置没有navigator的view的透明度即可 */
+}
+
+/* 设置按钮 */
+.float-action {
+  bottom: 20%;
+}
+
+
+/* 方圆形按钮:重命名,删除 */
+.rename,
+.del {
+  /* 子元素绝对定位 */
+  position: absolute;
+  /* border: solid 1px blue; */
+  width: 70px;
+  height: 100%;
+  display: flex;
+  /* 垂直排列，垂直水平居中对齐 */
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 5px;
+  /* 所有属性都会产生过渡效果，过渡持续的时间为0.3秒 */
+  transition: all 0.3s;
+
+  /* 位于父元素的最右侧 */
+  right: 0;
+}
+
+/* 重命名:有头像的首页,设置页 */
+.rename {
+  background-color: #8D86E6;
+  /* 向右移动140px，把重命名按钮藏起来 */
+  transform: translateX(140px);
+  /* 位于父元素的最右侧 */
+  right: 70px;
+}
+
+/* 删除按钮:有头像的首页,账单页,设置页 */
+.del {
+  background-color: #E6998D;
+  /* 向右移动70px，把删除按钮藏起来 */
+  transform: translateX(70px);
+  /* 位于父元素的最右侧 */
+  right: 0;
+}
+
+/* 左滑：删除，重命名 */
+.touch-move-active .del,
+.touch-move-active .rename {
+  /* 移动改为0，使其不再偏移，恢复原本的位置 */
+  transform: translateX(0);
+}
+
+/* 账目名 */
+.navigator-text {
+  white-space: nowrap;
+  /* 防止文本换行 */
+  overflow: hidden;
+  /* 隐藏溢出部分 */
+  text-overflow: ellipsis;
+  /* 文本溢出时显示省略号 */
+}

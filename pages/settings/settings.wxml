@@ -1,0 +1,40 @@
+<!--设置账目分类页面，settings.wxml-->
+
+<!-- 导入底部模板 -->
+<import src="../common/foot.wxml" />
+
+<view class="container">
+  <view class="page-head">
+    <view class="page-head-desc">设置消费分类</view>
+  </view>
+
+  <!-- 弹窗：“＋”新建类型 -->
+  <view>
+    <modal title="新增类型" hidden="{{modalHidden}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm" bindcancel="modalBindcancel">
+      <input name='title' bindblur="setTitle" placeholder="新增一个类型" value="{{temptitle}}">
+      </input>
+    </modal>
+  </view>
+
+  <!-- 设置页面主体 -->
+  <view class="page-body">
+
+    <!-- 主要内容区域 -->
+    <view class="index-bd">
+      <!-- 可点击区域,包括左滑后出现的重命名和删除按钮 -->
+      <view class="navigator {{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{list}}" wx:key="id">
+        <!-- 消费类型标题 -->
+        <view class="navigator-text">{{item.title}}</view>
+        <!-- 删除按钮 -->
+        <view class="del" catchtap="del" data-index="{{index}}">删除</view>
+      </view>
+    </view>
+    <!-- 新增按钮 -->
+    <view bindtap="showModal">
+      <image class="float-action2" src="../common/icon/add.png"></image>
+    </view>
+  </view>
+
+  <!-- 底部模板 -->
+  <template is="foot" />
+</view>
