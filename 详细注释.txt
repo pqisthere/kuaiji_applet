@@ -1,0 +1,70 @@
+，，，1
+在模态框中，value="{{temptitle}}" 表示将输入框的值绑定到名为 temptitle 的变量上，这样输入框的内容就会显示 temptitle 变量的值。当用户输入内容时，temptitle 的值会随之更新，从而实现与输入框内容的双向绑定。
+
+，，，2
+<view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{list}}" wx:key="index">
+动态设置属性。为true，class为touch-move-active，否则为空字符串
+目的是根据用户是否正在滑动来动态添加或移除样式类，实现滑动时的特效
+
+data-index绑定了当前项的索引值，用于在触发事件时获取当前项的信息
+
+当用户触摸开始时会触发touchstart事件处理函数 
+当用户触摸移动时会触发touchmove事件处理函数
+
+通过wx:for循环渲染账本列表中的每一项
+wx:key="index"：指定循环列表中每一项的唯一标识符，使用索引index作为唯一标识符
+`wx:key` 是必须的，它用于标识列表中每个项的唯一性，不指定会警告，并导致渲染出错
+虽然可能在其他地方没有直接用到 `wx:key`，但在循环渲染列表时，为了保证渲染的正确性和性能，务必要指定 `wx:key`
+
+<view wx:for="{{typelist}}" wx:key="typeid">
+遍历 typelist 数组中的每个元素，并将每个元素的数据绑定到 item 变量上进行渲染
+
+，，，3
+<view class="del" catchtap="del" data-index="{{index}}">删除</view>
+用户点击触发del事件处理函数
+catchtap用于捕获事件，会阻止事件向上冒泡，避免影响到父元素，否则点击删除，会冒泡，变成点进该账目
+data-index="{{index}}" 通过自定义 data-index 属性传递了一个名为 index 的变量值，这个值是在渲染组件时动态传递的。在点击事件触发时，可以通过 event.currentTarget.dataset.index 来获取到这个值，用于标识当前点击的是哪个元素，用于处理列表中的项 
+
+，，，4
+var isDuplicate = rawlist.some(item => item.title === newTitle);
+使用了 JavaScript 中的 `Array.prototype.some()` 方法来检查 `rawlist` 数组中是否存在与 `newTitle` 相同标题的元素。
+- `rawlist` 本地数据
+- `some()` 方法检查数组中是否至少有一个元素满足指定条件
+`some()` 方法的条件是一个箭头函数 `item => item.title === newTitle`。
+它接受一个参数 item，代表数组中的每个元素，并检查其 `title` 属性是否与 `newTitle` 相等。
+=== 是严格相等运算符，用于比较两个值是否完全相等，包括类型和值
+newTitle 是外部传入的一个值，用于与数组中的每个元素的 title 属性进行比较。
+如果当前元素的 title 属性与 newTitle 完全相等，则返回 true；否则返回 false
+- 最后，将这个返回值赋给 `isDuplicate` 变量，表示是否存在重复的标题。
+
+，，，5
+ app.globalData.typelist.forEach(function (type) {}
+type 是 app.globalData.typelist 数组中的每个元素
+在循环的每次迭代中，type 会依次代表数组中的一个消费类型对象
+
+ sublist.forEach(function (item, index) {}
+，item 表示数组中的当前元素，index 表示当前元素的索引值
+
+，，，6
+rawlist[this.data.mainindex].items.splice(index, 1);
+rawlist原始数据
+rawlist[this.data.mainindex]指定账本
+.items 访问指定账本的子项列表（消费记录）
+splice 方法用于从数组中删除元素，它接受两个参数：要删除的元素的索引 和 要删除的元素个数
+
+，，，7
+日期选择器组件
+<picker name="date" mode="date" value="{{date}}" bindchange="bindDateChange">{{date}}</picker>
+
+name名称，mode日期模式，value绑定选择器当前选中日期的值，bindchange绑定日期选择器值改变时的回调函数 
+
+，，，8
+string.padStart(targetLength [, padString])
+targetLength: 必需，期望的字符串长度，如果该值小于当前字符串的长度，则返回当前字符串本身，不进行填充。
+padString: 可选，要在当前字符串的开头添加的字符串。如果省略该参数，则默认使用空格进行填充。
+
+，，，9
+var sumByType = JSON.parse(currentPage.options.sumByType);
+将传递过来的 JSON 字符串 sumByType 解析为 JavaScript 对象，可以直接访问对象的属性和方法
+JavaScript 对象是一种复合数据类型，用于存储多个键值对。每个键值对中，键（也称为属性名）是字符串，值可以是任意的 JavaScript 数据类型，包括基本数据类型（如字符串、数字、布尔值）和其他对象（包括数组、函数、甚至是另一个对象）。
+

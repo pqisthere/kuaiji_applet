@@ -1,0 +1,5 @@
+.container-head{
+  margin-top: 30rpx;
+  display: flex;
+  justify-content: center; /* 水平居中对齐 */
+}

@@ -1,46 +1,63 @@
-<!-- 手账页 handBook.wxml>index.wxml -->
+<!-- 手账页 handBook.wxml > index.wxml -->
 
 <!-- 导入底部模板 -->
-<import src="../../common/foot.wxml" />
+<import src="../../common/foot" />
 
 <!-- 页面容器 -->
 <view class="container">
   <!-- 页面头部 -->
-  <view class="page-head">本账单共花费 {{sum}} 元</view>
-  <!-- 页面主体：包括主要内容，新增按钮 -->
+  <view class="page-head">
+    <view class="page-head-year">{{currentYear}}年</view>
+    <view class="page-head-sum">账本"{{zbtitle}}"共花费 {{sum}} 元</view>
+  </view>
+
+  <!-- 页面主体：包括主要内容，删除按钮，新增按钮，图标按钮 -->
   <view class="page-body">
     <!-- 主要内容区域 -->
     <view class="index-bd">
-      <!-- 可滑动区域（注解看思考.txt>10） -->
+      <!-- 可滑动区域（详细注解.txt > index）-->
       <view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{sublist}}" wx:key="id">
-        <!-- 点击跳转到详情页，navigator定义了可点击跳转区域 -->
-        <navigator url="../detail/detail?mainindex={{mainindex}}&subindex={{index}}&act=edit&subtitle={{item.subtitle}}&comment={{item.comment}}&cost={{item.cost}}&date={{item.date}}&time={{item.time}}&typeindex={{item.typeindex}}" class="navigator">
+        <!-- 消费日期，item.showDate 为 true，则显示日期，否则不显示 -->
+        <view class="navigator-time" wx:if="{{item.showDate}}">
+          <view>{{item.date}}</view>
+        </view>
+
+        <!-- 点击跳转到detail详情页，navigator定义了可点击跳转区域 -->
+        <navigator url="../detail/detail?mainindex={{mainindex}}&subindex={{index}}&act=edit&subtitle={{item.subtitle}}&comment={{item.comment}}&cost={{item.cost}}&date={{item.date}}&time={{item.time}}&typeid={{item.typeid}}" class="navigator">
+
           <!-- 消费信息-->
           <view class="navigator-text">
-            <!-- 消费日期 -->
-            <view class="navigator-time">{{item.date}}</view>
             <!-- 消费类型 -->
-            <view class="navigator-text1">{{typelist[item.typeindex].title}}</view>
-            <!-- item.typeindex当前项在消费类型列表中的索引
-            根据当前消费项目的类型索引 来获取 对应的消费类型标题 -->
+            <view class="navigator-text1">{{item.typetitle}}</view>
             <!-- 消费名称 -->
             <view class="navigator-text2">{{item.subtitle}}</view>
             <!-- 消费金额 -->
             <view class="navigator-text3">-{{item.cost}}</view>
           </view>
+
           <!-- 删除操作 -->
           <view class="del" catchtap="del" data-index="{{index}}">删除</view>
-          <!-- 通过 data-index 属性传递了一个名为 index 的变量值，这个值是在渲染组件时动态传递的。在点击事件触发时，可以通过 event.currentTarget.dataset.index 来获取到这个值，用于标识当前点击的是哪个元素，通常用于处理列表中的项 -->
         </navigator>
-        <!-- </view> -->
       </view>
     </view>
 
     <!-- 新增一笔支出按钮 -->
     <view>
       <navigator url="../detail/detail?mainindex={{mainindex}}&act=new">
-        <image class="float-action2" src="../../common/icon/add.png"></image>
+        <image class="float-action2" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/add.png"></image>
       </navigator>
+    </view>
+
+    <!-- 消费类型总金额 -->
+    <view>此为测试用</view>
+    <view>共花费：{{sum}}元</view>
+    <view wx:for="{{typelist}}" wx:key="typeid">
+      <view>{{item.title}}：{{sumByType[item.typeid].amount}}元</view>
+    </view>
+
+    <!-- 查看饼状图按钮 -->
+    <view bindtap="goToChartsPage">
+      <image class="float-action" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/chart.png"></image>
     </view>
 
   </view>

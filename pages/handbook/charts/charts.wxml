@@ -1,0 +1,12 @@
+<!--图表 handbook > charts.wxml -->
+
+<!-- 导入底部模板 -->
+<import src="../../common/foot.wxml" />
+
+<view class="page-head">账本"{{title}}"的消费统计图</view>
+<view class="container2">
+  <view class="container-head">共花费 {{sum}} 元</view>
+  <!-- 饼状图 -->
+  <canvas style="width:100%;height:650px;margin-top:20rpx;" canvas-id="pieCanvas" id="pieCanvas" bindtouchstart="touchStart"></canvas>
+
+</view>

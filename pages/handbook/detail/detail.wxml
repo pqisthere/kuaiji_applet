@@ -6,18 +6,13 @@
 <!-- 页面主体容器 -->
 <view class="container">
   <view class="page-body">
-
     <!-- 表单 -->
     <form bindsubmit="formSubmit" bindreset="formReset">
-
       <!-- 消费了啥 -->
       <view class="page-section">
         <view class="weui-cells__title">消费了啥</view>
-
-        <!-- 单元格，包含一个输入框 -->
-        <input id="inputTitle" class="weui-cell weui-cell_input" name="title" focus="{{isInputFocus}}" value='{{subtitle}}' />
+        <input id="inputTitle" class="weui-cell weui-cell_input" name="title" focus="true" value='{{subtitle}}' />
         <!-- value属性用于显示内容  -->
-
       </view>
 
       <!-- 消费类型选择 -->
@@ -27,13 +22,10 @@
         <scroll-view scroll-x="true" class="scroll-view-container">
           <view class="weui-cell weui-cell_input">
             <view wx:for="{{typelist}}" wx:key="index">
-
-              <button bindtap="selectType" data-index="{{index}}" class="{{item.selected ? 'selected_button' : ''}}">{{item.title}}</button>
-
+              <button bindtap="selectType" data-typeid="{{item.typeid}}" class="{{item.selected ? 'selected_button' : ''}}">{{item.title}}</button>
             </view>
           </view>
         </scroll-view>
-
       </view>
 
       <!-- 消费金额 -->
@@ -50,28 +42,20 @@
 
       <!-- 日期时间选择器 -->
       <view class="page-section">
-        <view class="weui-cells__title">日期</view>
+        <view class="weui-cells__title">日期时间</view>
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__bd">
-
             <!-- 日期选择器 -->
             <picker name="date" mode="date" value="{{date}}" bindchange="bindDateChange">{{date}}</picker>
-            <!-- 
-                  日期选择器组件
-                  name名称，mode日期模式，value绑定选择器当前选中日期的值，bindchange绑定日期选择器值改变时的回调函数 
-              -->
-
             <!-- 添加空格 -->
-            <view style="width: 60rpx;"></view>
-
+            <view style="width: 70rpx;"></view>
             <!-- 时间选择器 -->
-            <picker name="time" mode="time" value="{{time}}" start="00:01" end="23:59" bindchange="bindTimeChange">{{time}}</picker>
-
+            <picker name="time" mode="time" value="{{time}}"  bindchange="bindTimeChange">{{time}}</picker>
           </view>
         </view>
       </view>
 
-      <!-- 按钮区域 -->
+      <!-- 提交，重置按钮 -->
       <view class="btn-area">
         <button class="weui-btn" type="primary" formType="submit">提交</button>
         <button class="weui-btn" formType="reset">重置</button>

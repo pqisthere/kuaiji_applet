@@ -14,26 +14,29 @@ page {
   flex-direction: column;
   min-height: 100%;
   justify-content: space-between;
-  
   /* border: solid 1px red; */
 }
 
 /* 页头 */
 .page-head {
-  font-size: 37rpx;
-  padding: 20rpx 90rpx;
+  background-color: #7ba06b;
+  font-size: 38rpx;
+  font-weight: 600;
+  /* background-color: #ecaba1; */
+  color: #fff;
+  padding: 25rpx;
   text-align: center;
 }
 
 /* 页面主体：头像下面的区域，页头下面的区域 */
 .page-body {
+  /* border: blue 1px solid; */
   flex-grow: 1;
   /* 设置 Flex 布局中项目的放大比例的属性。决定项目在父容器中分配剩余空间的比例
   默认值为0，表示项目不放大。
   当设置为 1 时，表示该项目可以扩展以填充剩余空间
   如果容器中有多个具有相同 flex-grow 值的项目，它们将会平均分配剩余的空间
   如果其中一个子元素的 flex-grow 值比其他子元素的值大，那么它将获得更多的可用空间*/
-  /* border: blue 1px solid; */
 }
 
 /* 主要内容区域 */
@@ -43,7 +46,7 @@ page {
 }
 
 /* 可点击区域,包括按钮 */
-.navigator{
+.navigator {
   /* border: solid 1px blue; */
   padding-left: 20rpx;
   width: 100%;
@@ -99,7 +102,6 @@ page {
   bottom: 20%;
 }
 
-
 /* 方圆形按钮:重命名,删除 */
 .rename,
 .del {
@@ -146,7 +148,7 @@ page {
   transform: translateX(0);
 }
 
-/* 账目名 */
+/* 账本名 */
 .navigator-text {
   white-space: nowrap;
   /* 防止文本换行 */

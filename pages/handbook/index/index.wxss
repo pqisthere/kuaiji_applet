@@ -1,3 +1,30 @@
+.page-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 页头的年份 */
+.page-head-year {
+  display: flex; /* 使用 flex 布局 */
+  flex: 1;
+  border: 2px rgb(85, 85, 218) solid;
+  background-color: #8D86E6;
+  font-size: 30rpx;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  margin-right: 10rpx;
+}
+
+/* 页头的总花费金额 */
+.page-head-sum {
+  display: flex; /* 使用 flex 布局 */
+  flex: 4;
+  text-align: center;
+  white-space: nowrap; /* 防止换行 */
+  overflow: hidden; /* 隐藏多余部分 */
+  text-overflow: ellipsis; /* 显示省略号 */
+}
+
 /* 消费信息整体 */
 .navigator-text {
   /* border: green 1px solid; */
@@ -18,9 +45,9 @@
 
 /* 消费日期 */
 .navigator-time {
-  font-size: 25rpx;
+  font-size: 27rpx;
   color: #8D86E6;
-  margin-top: 10rpx;
+  /* margin-top: 10rpx; */
 }
 
 /* 消费类型 */

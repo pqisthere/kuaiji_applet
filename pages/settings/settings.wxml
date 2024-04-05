@@ -4,34 +4,43 @@
 <import src="../common/foot.wxml" />
 
 <view class="container">
-  <view class="page-head">
-    <view class="page-head-desc">设置消费分类</view>
-  </view>
+  <view class="page-head">消费类型</view>
 
-  <!-- 弹窗：“＋”新建类型 -->
+  <!-- 弹窗1：“＋”新建消费类型 -->
   <view>
     <modal title="新增类型" hidden="{{modalHidden}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm" bindcancel="modalBindcancel">
-      <input name='title' bindblur="setTitle" placeholder="新增一个类型" value="{{temptitle}}">
+      <input name='title' bindblur="setTitle" placeholder="最多三个中文字，六个英文字" value="{{temptitle}}">
       </input>
     </modal>
   </view>
 
-  <!-- 设置页面主体 -->
+  <!-- 弹窗2：“左滑”消费类型重命名 -->
+  <view>
+    <modal title="账本重命名" hidden="{{modalHidden2}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm2" bindcancel="modalBindcancel2">
+      <input name='title' bindblur="setTitle" value="{{temptitle}}">
+      </input>
+    </modal>
+  </view>
+
+  <!-- 页面主体：包括主要内容，重命名按钮，删除按钮，新增按钮 -->
   <view class="page-body">
 
     <!-- 主要内容区域 -->
     <view class="index-bd">
-      <!-- 可点击区域,包括左滑后出现的重命名和删除按钮 -->
+      <!-- 可滑动区域（注解看思考.txt>10） -->
       <view class="navigator {{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{list}}" wx:key="id">
         <!-- 消费类型标题 -->
         <view class="navigator-text">{{item.title}}</view>
+        <!-- 重命名按钮 -->
+        <view class="rename" catchtap="showModal2" data-index="{{index}}">重命名</view>
         <!-- 删除按钮 -->
-        <view class="del" catchtap="del" data-index="{{index}}">删除</view>
+        <view class="del" catchtap="del" data-typeid="{{ item.typeid }}">删除</view>
+
       </view>
     </view>
     <!-- 新增按钮 -->
     <view bindtap="showModal">
-      <image class="float-action2" src="../common/icon/add.png"></image>
+      <image class="float-action2" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/add.png"></image>
     </view>
   </view>
 

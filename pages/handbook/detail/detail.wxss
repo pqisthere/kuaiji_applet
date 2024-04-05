@@ -29,8 +29,8 @@
 
 /* 所有的输入框 */
 .weui-cell_input {
-  border-bottom: rgb(128, 128, 128) 0.05px solid;
   /* border: solid 1px black; */
+  border-bottom: rgb(128, 128, 128) 0.05px solid;
   width: 95%;
   display: flex;
   padding: 10rpx 0;

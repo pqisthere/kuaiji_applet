@@ -8,42 +8,43 @@
 
   <!-- 用户信息:头像,昵称 -->
   <view class="userinfo">
-    <image class="userinfo-avatar" src="../common/icon/院徽.png"></image>
-    <text class="userinfo-nickname">PQ的小账本</text>
+    <image class="userinfo-avatar" src="{{avatarUrl}}" bindtap="modifyAvatar"></image>
+    <view class="userinfo-nickname" bindtap="modifyNickname">{{nickname}}的小账本</view>
   </view>
 
-  <!-- 弹窗1：“＋”新建一个账目 -->
+  <!-- 弹窗3：修改昵称 -->
   <view>
-    <modal title="新建一个账目" hidden="{{modalHidden1}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm1" bindcancel="modalBindcancel1">
-      <input name='title' bindblur="setTitle" placeholder="取个名儿" value="{{temptitle}}">
+    <modal title="修改昵称" hidden="{{modalHidden3}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindconfirm3" bindcancel="modalBindcancel3">
+      <input name="nickname" bindblur="setName" placeholder="输入昵称" value="{{tempNickname}}">
       </input>
     </modal>
   </view>
-  <!-- 
-    <modal>模态框组件，用于在页面上显示一个模态对话框
-    modalHidden1 的值为 true 时，模态框隐藏
-    bindconfirm 和 bindcancel 属性分别绑定确认和取消按钮的点击事件处理函数
-    input输入框  name输入框的名称
-    bindblur当用户在输入框输入完内容后，点击 输入框外部 或者 按下"确认" ，
-    导致输入框失去焦点时，就会触发bindblur绑定的事件处理函数
-  -->
 
-  <!-- 弹窗2：“左滑”账目重命名 -->
+  <!-- 弹窗1：“＋”新建一个账本 -->
   <view>
-    <modal title="账目重命名" hidden="{{modalHidden2}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm2" bindcancel="modalBindcancel2">
+    <modal title="新建一个账本" hidden="{{modalHidden1}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindconfirm1" bindcancel="modalBindcancel1">
+      <input name='title' bindblur="setTitle" placeholder="取个名儿" value="{{temptitle}}">
+      <!-- 输入框的名称为 'title'，输入框失去焦点时要调用名为 setTitle 的函数 -->
+      </input>
+    </modal>
+  </view>
+
+  <!-- 弹窗2：“左滑”账本重命名 -->
+  <view>
+    <modal title="账本重命名" hidden="{{modalHidden2}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindconfirm2" bindcancel="modalBindcancel2">
       <input name='title' bindblur="setTitle" value="{{temptitle}}">
       </input>
     </modal>
   </view>
 
-  <!-- 页面主体：包括主要内容，新增按钮，设置按钮 -->
+  <!-- 页面主体：包括主要内容，重命名按钮，删除按钮，新增按钮，设置按钮 -->
   <view class="page-body">
 
     <!-- 主要内容区域 -->
     <view class="index-bd">
-      <!-- 可滑动区域（注解看思考.txt>10） -->
+      <!-- 可滑动区域（详细注解.txt > index） -->
       <view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{list}}" wx:key="index">
-        <!-- 点击跳转到该账目的index，navigator定义了可点击跳转区域 -->
+        <!-- navigator定义了可点击跳转区域，指定跳转路径，并传递参数index -->
         <navigator url="../handbook/index/index?index={{index}}" class="navigator">
           <!-- 账目标题 -->
           <view class="navigator-text">{{item.title}}</view>
@@ -58,12 +59,12 @@
 
     <!-- 新增按钮 -->
     <view bindtap="showModal1">
-      <image class="float-action2" src="../common/icon/add.png" ></image>
+      <image class="float-action2" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/add.png"></image>
     </view>
     <!-- 设置按钮 -->
     <view>
       <navigator url="../settings/settings">
-        <image class="float-action" src="../common/icon/setting.png"></image>
+        <image class="float-action" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/setting.png"></image>
       </navigator>
     </view>
 
