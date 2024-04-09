@@ -21,6 +21,7 @@ Page({
 
   // 生命周期函数--监听页面显示
   onShow: function () {
+    var rawlist = wx.getStorageSync('cashflow') || [];
     // 将每项的 isTouchMove 设为false
     rawlist.forEach(function (item) {
       item.isTouchMove = false;
@@ -28,10 +29,10 @@ Page({
     this.setData({
       list: rawlist
     });
-    console.log('账本：', this.data.list)
+    console.log('现有账本：', this.data.list)
   },
 
-  // 点击头像，修改头像事件处理函数
+  // ----点击头像，修改头像事件处理函数
   modifyAvatar: function () {
     var that = this;
     wx.chooseImage({
@@ -47,7 +48,7 @@ Page({
     });
   },
 
-  // 昵称模态框-显示
+  // -----昵称模态框-显示
   modifyNickname: function () {
     this.setData({
       modalHidden3: !this.data.modalHidden3, // 模态框的显示状态取反
@@ -82,7 +83,7 @@ Page({
     })
   },
 
-  // 新增账本模态框-显示
+  // ----新增账本模态框-显示
   showModal1: function () {
     this.setData({
       modalHidden1: !this.data.modalHidden1, // 模态框的显示状态取反
@@ -99,6 +100,7 @@ Page({
   // 新增账本模态框-确认
   modalBindconfirm1: function () {
     var newTitle = this.data.temptitle // 获取新账本标题
+    var rawlist = wx.getStorageSync('cashflow') || [];
     // 检查是否存在同名的账本
     var isDuplicate = rawlist.some(item => item.title === newTitle);
     if (isDuplicate) {
@@ -137,47 +139,49 @@ Page({
     })
   },
 
-  // 重命名模态框-显示
+  // ----重命名模态框-显示
   showModal2: function (e) {
     var tempindex = e.currentTarget.dataset.index // 获取当前项索引
     var temptitle = this.data.list[tempindex].title // 获取当前项标题
+    var rawlist = wx.getStorageSync('cashflow') || [];
     this.setData({
       modalHidden2: !this.data.modalHidden2, // 显示模态框
       temptitle: temptitle, // 帐本名
       tempindex: tempindex // 账本索引
     })
+    console.log('打开重命名框出现的该账单的消费记录:', rawlist[tempindex].items);
   },
 
   // 重命名模态框-确认
   modalBindconfirm2: function () {
-    var index = this.data.tempindex // 获取需要重命名的项的索引
-    var newTitle = this.data.temptitle // 获取新账本标题
+    var index = this.data.tempindex; // 获取需要重命名的项的索引
+    var newTitle = this.data.temptitle; // 获取新账本标题
+    var rawlist = wx.getStorageSync('cashflow') || [];
     // 检查是否存在同名的账本
     var isDuplicate = rawlist.some(item => item.title === newTitle);
     if (isDuplicate) {
-      wx.showToast({
-        title: '账本名不能重复或无更改!',
-        icon: 'none',
-      });
-      return;
+        wx.showToast({
+            title: '账本名不能重复或无更改!',
+            icon: 'none',
+        });
+        return;
     }
-    rawlist[index].title = this.data.temptitle // 修改该项本地存储的标题
+    console.log('点击确定重命名后出现的该账单消费记录:', rawlist[index].items);
 
-    // 初始化按钮位置，此行要写在setData前面
-    rawlist[index].isTouchMove = false;
+    rawlist[index].title = newTitle; // 修改账本名
+    wx.setStorageSync('cashflow', rawlist); // 更新本地缓存
 
     // 关闭模态框，清空输入框，更新数据
     this.setData({
-      modalHidden2: !this.data.modalHidden2,
-      temptitle: '', // 清空输入框中的内容,不清空下次点开还存有上次的数据
-      list: rawlist
-    })
+        modalHidden2: !this.data.modalHidden2,
+        temptitle: '', // 清空输入框中的内容,不清空下次点开还存有上次的数据
+        list: rawlist
+    });
 
-    // 将更新后的列表数据存储到本地缓存
-    wx.setStorageSync('cashflow', rawlist)
-    console.log('重命名账本名成功√')
+    console.log('重命名账本名成功√');
     this.onShow(); // 重新加载页面数据
-  },
+},
+
 
   // 重命名模态框-取消
   modalBindcancel2: function () {
@@ -191,7 +195,7 @@ Page({
     })
   },
 
-  // 手指开始触摸屏幕时触发，记录触摸的起始位置的 X 坐标
+  // ----手指开始触摸屏幕时触发，记录触摸的起始位置的 X 坐标
   touchstart: function (e) {
     this.setData({ // 更新页面数据
       startX: e.changedTouches[0].clientX, // 记录起始X坐标
@@ -224,6 +228,7 @@ Page({
   // 删除事件
   del: function (e) {
     var index = e.currentTarget.dataset.index // 获取要删除的列表项的索引
+    var rawlist = wx.getStorageSync('cashflow') || [];
     rawlist.splice(index, 1); // 从原始数据中删除对应索引的数据
     this.setData({ // 更新数据
       list: rawlist
@@ -235,7 +240,7 @@ Page({
       icon: 'success',
       duration: 500
     });
-    console.log('删除账本成功')
+    console.log('删除账本成功√')
     this.onShow(); // 重新加载页面数据
 
     // 播放删除音效

@@ -32,16 +32,37 @@
   /* border: solid 1px black; */
   border-bottom: rgb(128, 128, 128) 0.05px solid;
   width: 95%;
-  display: flex;
-  padding: 10rpx 0;
-  margin: 10rpx 0;
+  padding: 5rpx 0;
+  margin: 15rpx 0;
   /* 将上下padding和margin都设置为 10rpx，左右保持默认值（0）*/
 }
 
-/* 按钮 */
+/* 消费类型 */
+.weui-cell_type {
+  /* border: solid 1px black; */
+  display: flex;
+  height: 220rpx;
+}
+
+/* 地图 */
+.map {
+  position: relative;
+}
+
+/* 选择位置按钮 */
+.btn {
+  position: absolute;
+  bottom: 20rpx;
+  right: 30rpx;
+  background-color: #E6998D;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 30rpx;
+}
+
+/* 提交，重置按钮 */
 .btn-area {
-  margin-top: 60rpx;
+  margin-top: 20rpx;
   box-sizing: border-box;
-  width: 100%;
   padding: 0 30rpx;
 }

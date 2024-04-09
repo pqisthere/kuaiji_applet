@@ -9,70 +9,112 @@ let lastClickedIndex = -1;
 
 Page({
   data: {
+    isTotalPieChart: false, // 默认显示当前月消费类型饼状图
     canvasInfo: {}, // 画布信息
-    dataList: [], // 将 sumByType 的数据放在这里
+    dataList: [], // 将 sumByType 和 monSumBytype 的数据转换格式后放在这里
     pieInfo: {}, // 饼状图
-    sumByType: {}, // 按消费类型分类的总额
+    sumByType: {}, // 按消费类型分类的账本总额
+    monSumByType: {}, // 按消费类型分类的当月总额
     typelist: [], // 消费类型
     lastClickedIndex: -1, // 上一次点击的索引
     colors: ['#ADD8E6', '#EEB4B4', '#B89AF3', '#A3D586', '#FACA6A', '#ACA8A8']
   },
 
-  // 获取并更新总sum和导航标题
+  // 获取并更新总 sum 和导航标题
   onLoad: function (options) {
-    var sum = options.sum; // 解析传递的 sum 参数
+    // 解析传递的 sum 和 curMonSum
+    var sum = options.sum;
+    var curMonSum = options.curMonSum;
+
     // 获取上一个页面的导航标题
     var previousPageTitle = wx.getStorageSync('pageTitle');
     // 设置当前页面的导航栏标题为上一个页面的导航标题
     wx.setNavigationBarTitle({
       title: previousPageTitle,
     });
+
     this.setData({
       sum: sum,
-      title:previousPageTitle
+      curMonSum: curMonSum,
+      title: previousPageTitle,
+      isTotalPieChart: false, // 默认显示当前月消费类型饼状图
+      typelist: typelist // 设置消费类型列表
     });
+    // 绘制当前月消费类型饼状图
+    this.drawPie();
   },
 
   // 页面显示时调用
   onShow: function () {
     // 从当前页面的参数中提取 sumByType 数据
-
-    // 获取当前页面栈，包含了所有当前页面的数组
+    // 1-获取当前页面栈，包含了所有当前页面的数组
     var pages = getCurrentPages();
-    // 获取了当前页面栈中最后一个页面的实例，即当前页面的实例
+    // 2-获取了当前页面栈中最后一个页面的实例，即当前页面的实例
     var currentPage = pages[pages.length - 1];
-    // 将传递过来的 JSON 字符串 sumByType 解析为 JavaScript 对象
+    // 3-将传递过来的 JSON 字符串 sumByType/monSumByType 解析为 JavaScript 对象
     var sumByType = JSON.parse(currentPage.options.sumByType);
+    var sum = this.data.sum;
     console.log('charts页面接收到的的sumByType:', sumByType);
-
+    var monSumByType = JSON.parse(currentPage.options.monSumByType);
+    var curMonSum = this.data.curMonSum;
+    console.log('charts页面接收到的的monSumByType:', monSumByType);
+    // 存储两种类型的饼状图数据
     this.setData({
       sumByType: sumByType,
+      monSumByType: monSumByType,
       typelist: typelist
     });
 
-    // 将 sumByType 的对象数据转换为与 dataList 相同的结构，并存入 dataList
+    // 将 sumByType （对象，键是消费类型的ID，值是消费类型标题和总金额）转换为与 dataList 相同的结构（数组，包括消费类型的ID、标题、总金额和背景颜色），并存入 dataList
     var dataList = [];
+    var dataList2 = [];
     var colors = this.data.colors;
+    var colors2 = this.data.colors;
     var colorIndex = 0;
+    var colorIndex2 = 0;
     for (var key in sumByType) {
       // 判断对象 sumByType 是否具有名为 key 的属性
       if (sumByType.hasOwnProperty(key)) {
         var typeid = parseInt(key); // 将 typeid 转换为整数
-        var title = sumByType[key].title; // 获取消费类型名
-        var value = sumByType[key].amount; // 获取消费类型总金额
+        var title = sumByType[key].typetitle; // 获取消费类型名
+        // var value = sumByType[key].amount; // 获取消费类型总金额
+        var value = parseFloat(sumByType[key].amount); // 获取消费类型总金额，将字符串转换为数字类型
+        var percentage = ((value / sum) * 100).toFixed(1); // 计算百分比并保留一位小数
         // 将数据添加到 dataList 中
         dataList.push({
           typeid: typeid,
           title: title, // 将消费类型名作为标题
           value: value, // 将消费总金额作为值
+          percentage: percentage, // 存储百分比
           background: colors[colorIndex] // 使用预定义的颜色
         });
         colorIndex = (colorIndex + 1) % colors.length; // 超出后取余
       }
     }
+    for (var key in monSumByType) {
+      // 判断对象 sumByType 是否具有名为 key 的属性
+      if (monSumByType.hasOwnProperty(key)) {
+        var typeid = parseInt(key); // 将 typeid 转换为整数
+        var title = monSumByType[key].typetitle; // 获取消费类型名
+        // var value = monSumByType[key].curMonAmount; // 获取消费类型总金额
+        // 将数据添加到 dataList2 中
+        var value = parseFloat(monSumByType[key].curMonAmount); // 获取消费类型总金额，将字符串转换为数字类型
+        var percentage = ((value / curMonSum) * 100).toFixed(1); // 计算百分比并保留一位小数
+        dataList2.push({
+          typeid: typeid,
+          title: title, // 将消费类型名作为标题
+          value: value, // 将消费总金额作为值
+          percentage: percentage, // 存储百分比
+          background: colors2[colorIndex2] // 使用预定义的颜色
+        });
+        colorIndex2 = (colorIndex2 + 1) % colors2.length; // 超出后取余
+      }
+    }
     console.log('将sumbytype转换后存入dataList', dataList)
+    console.log('将monSumByType转换后存入dataList2', dataList2)
     this.setData({
-      dataList: dataList
+      dataList: dataList,
+      dataList2: dataList2
     });
     // 绘制饼状图
     this.measureCanvas();
@@ -151,10 +193,13 @@ Page({
     // 创建画布上下文
     const ctxPie = wx.createCanvasContext("pieCanvas");
     var canvasInfo = this.data.canvasInfo;
-    var dataList = this.data.dataList;
+    // 根据标志位选择要绘制的数据
+    var dataList = this.data.isTotalPieChart ? this.data.dataList : this.data.dataList2;
+    console.log('根据标志位选择要绘制的数据dataList', dataList)
     var pieInfo = this.data.pieInfo;
     var typelist = app.globalData.typelist;
     var lastClickedIndex = this.data.lastClickedIndex;
+    console.log('drawPie里的lastClickedIndex',lastClickedIndex)
     // 计算饼图半径
     var pieRadius = (canvasInfo.width - 90) / 2.5;
     pieInfo.pieRadius = pieRadius;
@@ -189,12 +234,12 @@ Page({
       ctxPie.fillStyle = dataList[i].background;
       ctxPie.fill();
       ctxPie.closePath();
-    }
+    };
 
-    // 绘制标注
+    // ----绘制标注
     for (var i = 0; i < dataList.length; i++) {
-      var startX = pieRadius - 15;
-      var startY = pieY + pieRadius + 20 + i * 30 + 15; // 20 是标注和饼图之间的间距
+      var startX = 60;
+      var startY = 300 + i * 35; // 35是标注之间的距离
       if (lastClickedIndex === i) {
         startX += 5; // 标注放大时，向右移动一点
         startY += 5; // 标注放大时，向下移动一点
@@ -210,12 +255,29 @@ Page({
           break;
         }
       }
-
       ctxPie.fillStyle = '#8a8a8a'; // 标注字体颜色
       ctxPie.font = '17rpx sans-serif'; // 标注字体
-      ctxPie.fillText(title, startX + 30, startY + 15); // 标题
-      ctxPie.fillText(dataList[i].value + "元", startX + 80, startY + 15); // 数值
-      ctxPie.fillText(parseInt(dataList[i].value * 100 / totalValue) + "%" + "", startX + 140, startY + 15); // 百分比
+      ctxPie.fillText(title, startX + 35, startY + 15); // 标题
+
+      // -----绘制数值
+      // 数值的起始位置
+      var valueTextX = startX + 80;
+      var bigValue = dataList[i].value; // 保存原始值
+      if (bigValue >= 100000000) { // 超过亿，转换成数字类型，用科学计数法，小数点保留后两位
+        bigValue = parseFloat(bigValue).toExponential(2);
+        ctxPie.fillText(bigValue + "元", valueTextX, startY + 15);
+      } else if (bigValue >= 1000000) { // 超过百万
+        bigValue = (bigValue / 1000000).toFixed(2);
+        ctxPie.fillText(bigValue + '百万', valueTextX, startY + 15);
+      } else {
+        ctxPie.fillText(dataList[i].value + "元", valueTextX, startY + 15);
+      }
+
+      // ----绘制百分比
+      var percentageText = parseInt(dataList[i].value * 100 / totalValue) + "%";
+      var percentageTextX = 0;
+      percentageTextX = startX + 200;
+      ctxPie.fillText(percentageText, percentageTextX, startY + 15);
     }
 
     // 存储每个扇形的角度信息
@@ -223,6 +285,41 @@ Page({
     this.data.pieInfo = pieInfo;
     // 绘制画布
     ctxPie.draw();
-  }
+  },
 
+  // 切换饼状图
+  togglePieChart: function () {
+    var isTotalPieChart = this.data.isTotalPieChart;
+    var sum = this.data.sum;
+    var curMonSum = this.data.curMonSum;
+    console.log('切换饼状图的lastClickedIndex',lastClickedIndex)
+    // 切换数据显示状态
+    this.setData({
+      isTotalPieChart: !isTotalPieChart, // 切换标志位
+      sum: sum,
+      curMonSum: curMonSum,
+      lastClickedIndex: -1 // 重置已点击的扇形索引
+    });
+    // 根据标志位重新绘制饼状图
+    this.drawPie();
+  },
+
+  // 标注点击事件处理函数
+  handleLegendClick: function (e) {
+    // 获取点击的标注索引
+    var index = e.currentTarget.dataset.index;
+    // 获取上一次点击的索引
+    var lastClickedIndex = this.data.lastClickedIndex;
+    // 判断当前点击的标注是否与上次点击的标注相同
+    if (lastClickedIndex === index) {
+      // 如果相同，则重置 lastClickedIndex 为-1，表示没有扇形被选中
+      index = -1;
+    }
+    // 更新状态中的 lastClickedIndex
+    this.setData({
+      lastClickedIndex: index,
+    });
+    // 重新绘制饼状图
+    this.drawPie();
+  },
 });

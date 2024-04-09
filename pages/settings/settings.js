@@ -59,19 +59,19 @@ Page({
     // 计算输入的字符数量，一个中文字符等于两个英文字符
     var length = newTitle.replace(/[\u0391-\uFFE5]/g, "aa").length;
     // 计算字符长度是否超过限制
-    if (length > 6) { // 假设最多三个中文字或同等大小的英文字
+    if (length > 4) { // 最多2个中文字或4个的英文字
       wx.showToast({
-        title: '消费类型不能超过6个字符!',
+        title: '不能超过2个中文字或4个英文字!',
         icon: 'none',
         duration: 1500
       });
       return;
     }
     // 检查是否存在同名的消费类型
-    var isDuplicate = typelist.some(item => item.title === newTitle);
+    var isDuplicate = typelist.some(item => item.typetitle === newTitle);
     if (isDuplicate) {
       wx.showToast({
-        title: '消费类型不能重复或无更改!',
+        title: '不能重复或无更改!',
         icon: 'none',
         duration: 1500
       });
@@ -81,7 +81,7 @@ Page({
     var newId = Date.now(); // 使用当前时间戳作为 ID
     app.globalData.typelist.push({ // 将新项添加到全局列表末尾
       typeid: newId,
-      title: newTitle,
+      typetitle: newTitle,
       selected: false,
       isTouchMove: false
     });
@@ -108,7 +108,7 @@ Page({
   // 重命名模态框-显示
   showModal2: function (e) {
     var tempindex = e.currentTarget.dataset.index // 获取当前项索引
-    var temptitle = this.data.list[tempindex].title // 获取当前项标题
+    var temptitle = this.data.list[tempindex].typetitle // 获取当前项标题
     this.setData({
       modalHidden2: !this.data.modalHidden2, // 显示模态框
       temptitle: temptitle, // 消费类型名
@@ -123,16 +123,16 @@ Page({
     // 计算输入的字符数量，一个中文字符等于两个英文字符
     var length = newTitle.replace(/[\u0391-\uFFE5]/g, "aa").length;
     // 计算字符长度是否超过限制
-    if (length > 6) { // 假设最多三个中文字或同等大小的英文字
+    if (length > 4) { // 最多2个中文字或4个英文字
       wx.showToast({
-        title: '消费类型不能超过6个字符!',
+        title: '不能超过2个中文字或4个英文字!',
         icon: 'none',
         duration: 1500
       });
       return;
     }
     // 检查是否存在同名的账本
-    var isDuplicate = app.globalData.typelist.some(item => item.title === newTitle);
+    var isDuplicate = app.globalData.typelist.some(item => item.typetitle === newTitle);
     if (isDuplicate) {
       wx.showToast({
         title: '消费类型不能重复!',
@@ -142,7 +142,7 @@ Page({
       return;
     }
     // 修改该项全局名
-    app.globalData.typelist[index].title = this.data.temptitle
+    app.globalData.typelist[index].typetitle = this.data.temptitle
 
     // 初始化按钮位置，此行要写在setData前面
     app.globalData.typelist[index].isTouchMove = false;

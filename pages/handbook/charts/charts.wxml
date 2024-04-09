@@ -3,10 +3,29 @@
 <!-- 导入底部模板 -->
 <import src="../../common/foot.wxml" />
 
-<view class="page-head">账本"{{title}}"的消费统计图</view>
+<view class="page-head overell">账本"{{title}}"的消费统计图</view>
+
 <view class="container2">
-  <view class="container-head">共花费 {{sum}} 元</view>
+  <view class="container-head">
+    <!-- 根据切换状态显示总花费或本月花费 -->
+    {{isTotalPieChart ? '账本共花费 ' + sum + ' 元' : '本月共花费 ' + curMonSum + ' 元'}}
+  </view>
+
   <!-- 饼状图 -->
-  <canvas style="width:100%;height:650px;margin-top:20rpx;" canvas-id="pieCanvas" id="pieCanvas" bindtouchstart="touchStart"></canvas>
+  <canvas class='canvas' canvas-id="pieCanvas" id="pieCanvas" bindtouchstart="touchStart">
+  </canvas>
+
+  <!-- 切换饼状图按钮（一定不能放在canvas里面，否则点击按钮时，第一个扇形和标注会触发点击事件，原因我也不知道） -->
+  <view class="switch" bindtap="togglePieChart">
+    {{isTotalPieChart ? "切换当月" : "切换总账"}}
+  </view>
+
+  <view class="legend" wx:for="{{isTotalPieChart ? dataList : dataList2}}" wx:key="typeid" bindtap="handleLegendClick" data-index="{{index}}">
+    <!-- 标注内容 -->
+    <view class="color-box" style="background-color: {{colors[index % colors.length]}}"></view>
+    <text>{{item.title}} {{item.percentage}}% </text>
+    <text> {{item.value}}元</text>
+  </view>
+
 
 </view>

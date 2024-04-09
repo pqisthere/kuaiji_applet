@@ -25,37 +25,37 @@ App({
   globalData: {
     typelist: [{
         typeid: 111,
-        title: '购物',
+        typetitle: '购物',
         selected: false,
         isTouchMove: false
       },
       {
         typeid: 222,
-        title: '餐饮',
+        typetitle: '餐饮',
         selected: false,
         isTouchMove: false
       },
       {
         typeid: 333,
-        title: '交通',
+        typetitle: '交通',
         selected: false,
         isTouchMove: false
       },
       {
         typeid: 444,
-        title: '住宿',
+        typetitle: '住宿',
         selected: false,
         isTouchMove: false
       },
       {
         typeid: 555,
-        title: '玩乐',
+        typetitle: '玩乐',
         selected: false,
         isTouchMove: false
       },
       {
         typeid: 666,
-        title: '其他',
+        typetitle: '其他',
         selected: false,
         isTouchMove: false
       }

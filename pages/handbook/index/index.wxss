@@ -1,28 +1,14 @@
+/* 页面头部样式 */
 .page-head {
   display: flex;
-  justify-content: space-between;
 }
 
-/* 页头的年份 */
-.page-head-year {
-  display: flex; /* 使用 flex 布局 */
-  flex: 1;
-  border: 2px rgb(85, 85, 218) solid;
-  background-color: #8D86E6;
-  font-size: 30rpx;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  margin-right: 10rpx;
-}
-
-/* 页头的总花费金额 */
-.page-head-sum {
-  display: flex; /* 使用 flex 布局 */
-  flex: 4;
-  text-align: center;
-  white-space: nowrap; /* 防止换行 */
-  overflow: hidden; /* 隐藏多余部分 */
-  text-overflow: ellipsis; /* 显示省略号 */
+/* 页头的年份，页头标题，预算容器，消费日期 */
+.page-head-year,
+.page-head-sum,
+.budget-container,
+.navigator-time {
+  margin: 0 10rpx;
 }
 
 /* 消费信息整体 */
@@ -32,36 +18,24 @@
   width: 100%;
 }
 
-.navigator-time,
-.navigator-text1,
-.navigator-text2,
-.navigator-text3{
-  /* border: red 1px solid; */
-  margin-right: 15rpx;
-  white-space: nowrap; /* 防止文本换行 */
-  overflow: hidden; /* 隐藏溢出部分 */
-  text-overflow: ellipsis; /* 文本溢出时显示省略号 */
-}
-
 /* 消费日期 */
 .navigator-time {
   font-size: 27rpx;
   color: #8D86E6;
-  /* margin-top: 10rpx; */
 }
 
 /* 消费类型 */
 .navigator-text1 {
   color: #a85060;
-  flex: 1;
+  width: 120rpx;
 }
 
 /* 消费名称 */
 .navigator-text2 {
-  flex: 1.5;
+  flex: 2;
 }
 
 /* 消费金额 */
 .navigator-text3 {
-  flex: 2;
+  flex: 1;
 }

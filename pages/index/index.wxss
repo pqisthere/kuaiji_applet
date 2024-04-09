@@ -1,13 +1,13 @@
 /** index.wxss **/
 
-/** 用户信息样式 **/
+/** 用户信息：头像，昵称 **/
 .userinfo {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/** 用户头像样式 **/
+/** 用户头像 **/
 .userinfo-avatar {
   width: 230rpx;
   height: 230rpx;
@@ -17,7 +17,7 @@
   border: solid 6px #8D86E6;
 }
 
-/** 用户昵称样式 **/
+/** 用户昵称 **/
 .userinfo-nickname {
   color: #333333;
   margin: 20rpx 0;

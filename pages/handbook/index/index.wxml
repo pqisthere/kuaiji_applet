@@ -6,14 +6,37 @@
 <!-- 页面容器 -->
 <view class="container">
   <!-- 页面头部 -->
-  <view class="page-head">
-    <view class="page-head-year">{{currentYear}}年</view>
-    <view class="page-head-sum">账本"{{zbtitle}}"共花费 {{sum}} 元</view>
+  <view class="page-head aljucenter">
+    <view class="page-head-year ">{{currentYear}}</view>
+    <text>|</text>
+    <view class="page-head-sum overell ">账本"{{zbtitle}}"共花费{{sum}}元 </view>
   </view>
 
   <!-- 页面主体：包括主要内容，删除按钮，新增按钮，图标按钮 -->
   <view class="page-body">
     <!-- 主要内容区域 -->
+
+    <!-- 预算按钮 -->
+    <scroll-view scroll-x="true" class="budget-container overell aljucenter" catchtap="budgetModal">
+      {{currentMonth}}月 | 预算
+      <text style="color: green;">{{MonBudget}}</text>元
+      | 已消费<text style="color: red;">{{curMonSum}}</text>元
+      | 还剩<text style="color: blue;">{{MonBudget-curMonSum}}</text>元
+    </scroll-view>
+
+    <!-- 进度条 -->
+    <view class="progress-box">
+      <progress percent="{{percent}}" color="#E6998D" show-info />
+    </view>
+
+    <!-- 弹窗：预算 -->
+    <view>
+      <modal title="预算" hidden="{{budgetHidden}}" confirm-text="确定" cancel-text="取消" bindconfirm="budgetConfirm" bindcancel="budgetCancel">
+        <input name='budget' bindblur="setBudget" placeholder="请输入本月预算" type="number" value="{{tempMonBudget}}">
+        </input>
+      </modal>
+    </view>
+
     <view class="index-bd">
       <!-- 可滑动区域（详细注解.txt > index）-->
       <view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{sublist}}" wx:key="id">
@@ -23,22 +46,39 @@
         </view>
 
         <!-- 点击跳转到detail详情页，navigator定义了可点击跳转区域 -->
-        <navigator url="../detail/detail?mainindex={{mainindex}}&subindex={{index}}&act=edit&subtitle={{item.subtitle}}&comment={{item.comment}}&cost={{item.cost}}&date={{item.date}}&time={{item.time}}&typeid={{item.typeid}}" class="navigator">
+        <navigator url="../detail/detail?mainindex={{mainindex}}&subindex={{index}}&act=edit&subtitle={{item.subtitle}}&comment={{item.comment}}&cost={{item.cost}}&date={{item.date}}&time={{item.time}}&typeid={{item.typeid}}&location={{item.location}}" class="navigator">
 
           <!-- 消费信息-->
           <view class="navigator-text">
             <!-- 消费类型 -->
+            <!-- <view class="navigator-text1">{{typelist[item.typeid].typetitle}}</view> -->
             <view class="navigator-text1">{{item.typetitle}}</view>
             <!-- 消费名称 -->
-            <view class="navigator-text2">{{item.subtitle}}</view>
+            <view class="navigator-text2  overell">{{item.subtitle}}</view>
             <!-- 消费金额 -->
-            <view class="navigator-text3">-{{item.cost}}</view>
+            <view class="navigator-text3  overell">-{{item.cost}}</view>
           </view>
 
           <!-- 删除操作 -->
           <view class="del" catchtap="del" data-index="{{index}}">删除</view>
         </navigator>
       </view>
+    </view>
+
+    <!-- 消费类型总金额 -->
+    <view>此为测试用</view>
+    <view>
+      <!-- 当月总花费 -->
+      <text>本月总花费：{{curMonSum}} 元</text>
+      <!-- 当月各类型总花费 -->
+      <view wx:for="{{monSumByType}}" wx:key="typeid1">
+        <view>{{item.typetitle}}：{{item.curMonAmount}}元</view>
+      </view>
+    </view>
+    <view>--------</view>
+    <view>共花费：{{sum}}元</view>
+    <view wx:for="{{typelist}}" wx:key="typeid2">
+      <view>{{item.typetitle}}：{{sumByType[item.typeid].amount}}元</view>
     </view>
 
     <!-- 新增一笔支出按钮 -->
@@ -48,17 +88,11 @@
       </navigator>
     </view>
 
-    <!-- 消费类型总金额 -->
-    <view>此为测试用</view>
-    <view>共花费：{{sum}}元</view>
-    <view wx:for="{{typelist}}" wx:key="typeid">
-      <view>{{item.title}}：{{sumByType[item.typeid].amount}}元</view>
-    </view>
-
     <!-- 查看饼状图按钮 -->
     <view bindtap="goToChartsPage">
       <image class="float-action" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/chart.png"></image>
     </view>
+
 
   </view>
 

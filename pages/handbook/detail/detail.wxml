@@ -11,7 +11,7 @@
       <!-- 消费了啥 -->
       <view class="page-section">
         <view class="weui-cells__title">消费了啥</view>
-        <input id="inputTitle" class="weui-cell weui-cell_input" name="title" focus="true" value='{{subtitle}}' />
+        <input class="weui-cell weui-cell_input" name="title" focus="true" value='{{subtitle}}' />
         <!-- value属性用于显示内容  -->
       </view>
 
@@ -20,9 +20,9 @@
         <view class="weui-cells__title">消费类型</view>
         <!-- 按钮左右滑动 -->
         <scroll-view scroll-x="true" class="scroll-view-container">
-          <view class="weui-cell weui-cell_input">
+          <view class="weui-cell weui-cell_input weui-cell_type">
             <view wx:for="{{typelist}}" wx:key="index">
-              <button bindtap="selectType" data-typeid="{{item.typeid}}" class="{{item.selected ? 'selected_button' : ''}}">{{item.title}}</button>
+              <button bindtap="selectType" data-typeid="{{item.typeid}}" class="{{item.selected ? 'selected_button' : ''}}">{{item.typetitle}}</button>
             </view>
           </view>
         </scroll-view>
@@ -48,11 +48,18 @@
             <!-- 日期选择器 -->
             <picker name="date" mode="date" value="{{date}}" bindchange="bindDateChange">{{date}}</picker>
             <!-- 添加空格 -->
-            <view style="width: 70rpx;"></view>
+            <view style="width: 80rpx;"></view>
             <!-- 时间选择器 -->
-            <picker name="time" mode="time" value="{{time}}"  bindchange="bindTimeChange">{{time}}</picker>
+            <picker name="time" mode="time" value="{{time}}" bindchange="bindTimeChange">{{time}}</picker>
           </view>
         </view>
+      </view>
+
+      <!-- 地图显示 -->
+      <view class="page-section map">
+        <map id="map" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" bindmarkertap="markertap">
+        </map>
+          <button class="btn" bindtap="chooseLocation">选择位置</button>
       </view>
 
       <!-- 提交，重置按钮 -->
@@ -61,8 +68,8 @@
         <button class="weui-btn" formType="reset">重置</button>
       </view>
       <!-- 
-        type="primary"：按钮的类型为主要按钮，通常用于突出显示主要操作
-        formType="submit"：按钮类型为提交按钮，用于触发表单提交事件
+        type="primary"：主要按钮，通常用于突出显示主要操作
+        formType="submit"：提交按钮，用于触发表单提交事件
       -->
     </form>
   </view>

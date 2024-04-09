@@ -9,7 +9,7 @@
   <!-- 弹窗1：“＋”新建消费类型 -->
   <view>
     <modal title="新增类型" hidden="{{modalHidden}}" confirm-text="确定" cancel-text="取消" bindconfirm="modalBindaconfirm" bindcancel="modalBindcancel">
-      <input name='title' bindblur="setTitle" placeholder="最多三个中文字，六个英文字" value="{{temptitle}}">
+      <input name='title' bindblur="setTitle" placeholder="最多2个中文字或4个英文字" value="{{temptitle}}">
       </input>
     </modal>
   </view>
@@ -30,7 +30,7 @@
       <!-- 可滑动区域（注解看思考.txt>10） -->
       <view class="navigator {{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{list}}" wx:key="id">
         <!-- 消费类型标题 -->
-        <view class="navigator-text">{{item.title}}</view>
+        <view class="navigator-text">{{item.typetitle}}</view>
         <!-- 重命名按钮 -->
         <view class="rename" catchtap="showModal2" data-index="{{index}}">重命名</view>
         <!-- 删除按钮 -->

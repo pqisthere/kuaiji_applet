@@ -1,147 +1,46 @@
 1.
-    this.setData({
-      modalHidden1: !this.data.modalHidden1,
-      temptitle: '', // 清空输入框中的内容,不清空下次点开还存有上次的数据
-      list: templist
-    })
-
-2.
-    用templist，temptitle，tempindex在副本上先操作，操作完了再修改实际的原始数据，
-    有助于保持原始数据的完整性，不会对页面渲染造成影响
-
-3.
-左滑出现重命名、删除按钮
-  transform: translateX(180px);
-  /* 元素本身的位置不变，但内容区域向右移动了180px */
+①左滑出现重命名、删除按钮
+  transform: translateX(140px);
+  /* 元素本身的位置不变，但内容区域向右移动了140px */
   触发滑动事件后
   transform: translateX(0);
   再配合动画效果，看起来就像是左滑出现按钮
-  有个bug，它原本位置仍然存在
+  bug，不脱标，它原本位置仍然存在
+
+②修复了点击内容的区域，之前只能点击文字的地方，右边被占据的按钮的位置无法点击，文字和边框之间的padding不可点击。
+只需将可点击区域 content 放在 navigator 的 class 里，再将按钮放在 navigator 里即可，bug，此时按钮将不再和一条条的数据左右排列，而是会在一条条数据的下面
+
+修复bug：
+设置子绝父相，子元素设置不同的right（如果right相同，后者会覆盖前者）
+/* 子元素绝对定位 */
+position: absolute;
+/* 位于父元素的最右侧 */
+right: 0;
+
+2.
+未解之谜：我想让消费日期显示格式为03-31，即去除年份
+但是很奇怪，我使用三种方法
+①直接在提交表单的时候，就把日期阉割成只有月份和日期，没有年份的，结果最终显示的还是有年份（这种方法我也不建议，因为要根据年月日比较来排序）
+②在wxml里阉割，结果是所有，年份，月份和日期都不见了
+③设置displayDate，提交完整日期，显示时只显示月份和日期，但是结果还是所有全部消失
+
+3.
+两个index都涉及遍历列表数据的操作，此时 wx:for="{{list}}" wx:key="index"，wx:key的值不能相同，否则警告
 
 4.
-this.data.mainindex 是小程序中页面数据对象（data）中的一个属性，它用于存储当前页面中某个主要项目（main item）的索引值。通常情况下，当需要在页面中处理多个项目时，可以使用 mainindex 来指示当前正在操作的项目的索引。
-
-5.settings.js
-// 删除事件
-  del: function (e) {
-    var index = e.currentTarget.dataset.index;
-    var typelist = this.data.list;
-    // 从页面数据中删除指定索引的项，这里删除的只是此页面能看到的数据，缓存没删除
-    typelist.splice(index, 1);
-    // 更新页面数据
-    this.setData({
-      list: typelist
-    });
-    console.log('typelist', typelist);
-    // 清空缓存数据，这里清空的是用户自定义的数据，因为用户自定义的在此之前已经放到实际的typelist里了，如果不清空，下次新增会把之前删除的所有分类全部加回来，因为你的缓存没有清空
-    wx.removeStorageSync('userdeflist');
-
-    // 更新全局的 typelist，不更新的话，如果你删除了全局默认的类型，下次点进来还是保持没删除全局的样子
-    app.globalData.typelist = typelist;
-
-    // 提示删除成功
-    wx.showToast({
-      title: '删除成功',
-      icon: 'success',
-      duration: 500
-    });
-  }
-
-  6.detail.js
-       for (let i = 0; i < typelist.length; i++) {
-        if (i == typeindex) { // 注意这里不能用===，否则无效，===比较值和类型
-          typelist[i].selected = true; // 当前点击的位置为true即选中
-        } else {
-          typelist[i].selected = false; // 其他的位置为false
-        }
-      }
-            // 上面这一段看起来和  selectType: function (e) 里的重复了，但是不可以把他放到  selectType: function (e) 里面，具体原因我也不知道，反正你放个console.log进去，页面打开时，全部按钮都没被选中，console也没有输出任何信息，只有当你点击按钮时，console才会输出信息。我猜想selectType: function (e) 应该是只能点击触发，默认不会触发
-
-7.
-修复了点击内容的区域，之前只能点击文字的地方，右边被占据的按钮的位置无法点击，文字和边框之间的padding不可点击。
-只需将可点击区域content放在navigator的class里，再将按钮放在navigator里即可，但此时按钮将不再和一条条的数据左右排列，而是会在一条条数据的下面，此时设置子绝父相
-
-8.两个index都涉及遍历列表数据的操作，此时 wx:for="{{list}}" wx:key="index"，wx:key的值不能相同，否则警告
-
-9.不可以吧rename和del按钮都设置为right:0，否则删除按钮覆盖重命名按钮，最终只显示一个按钮
-
-10.
-<view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{list}}" wx:key="index">
-渲染账目列表中的每一项
-
-动态设置属性。为true，class为touch-move-active，否则为空字符串。
-目的是根据用户是否正在滑动来动态添加或移除样式类，实现滑动时的特效。
-
-data-index属性绑定了当前项的索引值，用于在触发事件时获取当前项的信息。
-
-当用户触摸开始时会触发touchstart事件处理函数 
-当用户触摸移动时会触发touchmove事件处理函数
-
-通过wx:for循环渲染账目列表中的每一项
-wx:key="index"：指定循环列表中每一项的唯一标识符，使用索引index作为唯一标识符
-`wx:key` 是必须的，它用于标识列表中每个项的唯一性，不指定会警告，并导致渲染出错
-虽然可能在其他地方没有直接用到 `wx:key`，但在循环渲染列表时，为了保证渲染的正确性和性能，务必要指定 `wx:key`
-
-bug 11.我想让消费日期显示格式为03-31，即去除年份
-但是很奇怪，我使用两种方法
-①直接在提交表单的时候，就把日期阉割成只有月份和日期，没有年份的，结果最终显示的还是有年份
-②在wxml里阉割，结果是所有日期都不见了，年份，月份和日期都不见了
-
-bug 12.修改了setting的消费类型，detail里的并不会实时更新
+bug，修改了setting的消费类型，detail里的并不会实时更新
 修复：
 原来是onLoad和onShow的问题！！
 onLoad只会在第一次进入该页面时加载，此后不会加载
 onShow在每次进入页面后都会重新加载
 要想让修改后的值实时更新，一定要加onShow
 
+bug，左滑拉出了删除重命名按钮，然后跳到另一个页面，再返回，按钮还保持被拉出的状态，理想是，跳到另一个页面的时候，按钮全部恢复默认（没拉出）的状态
+解决：在onShow设置全部item.isTouchMove = false;
 
-bug 13.重命名模态框点击确认或者取消后，重命名按钮不会回到初始位置（即在屏幕之外）
+5.
+bug，detail里，消费了啥，备注的聚焦问题，只有点击输入框的左侧才会有光标闪烁
 修复：
-  // 重命名模态框-取消
-  modalBindcancel2: function () {
-    var templist = this.data.list // 获取当前列表数据！！！
-    var index = this.data.tempindex // 获取需要重命名的项的索引！！！
-    // 将按钮的位置重置为初始位置，此行要写在setData前面！！！
-    templist[index].isTouchMove = false;
-    this.setData({
-      modalHidden2: !this.data.modalHidden2,
-      list: templist // ！！！
-    })
-  },
-
-
-  bug 14.左滑拉出了删除重命名按钮，然后跳到另一个页面，再返回，按钮还保持被拉出的状态，理想是，跳到另一个页面的时候，按钮全部恢复默认（没拉出）的状态
-  解决：
-
-  // index.js
-  onShow:function(){
-    var list = wx.getStorageSync('cashflow') || []; // 从本地缓存中获取用户现金流数据，如果没有则为空数组
-    // 遍历列表项，为每个列表项添加isTouchMove属性，并初始化为false
-    list.forEach(function (item) {
-      item.isTouchMove = false;
-    });
-    this.setData({
-      list: list
-    });
-  },
-
-// setting.js
-  onShow: function () {
-    // 在页面显示时重新将全局数据赋值给data中的list
-    var typelist = app.globalData.typelist;
-    typelist.forEach(function (item) {
-      item.isTouchMove = false; // 将每个元素的isTouchMove属性设置为false
-    });
-    // 更新页面数据，将处理后的typelist赋值给list
-    this.setData({
-      list: typelist
-    });
-    console.log('设置页面onShow', this.data.list);
-  },
-
-bug 15.  detail里
-    消费了啥，备注的聚焦问题，只有点击输入框的左侧才会有光标闪烁
-    解决：
     原来：
       <view class="weui-cell weui-cell_input">
         <input name="title" focus='{{isfocus}}' value='{{subtitle}}' />
@@ -150,65 +49,113 @@ bug 15.  detail里
     <input class="weui-cell weui-cell_input" name="title" focus='{{isfocus}}' value='{{subtitle}}' />
     原来的input区域只有一小块，修改后，整个单元格都是input区域
 
-16.detail
-每次new都要循环遍历所有的消费类型selected为false，第0个为true
-否则，下次new还会保存上次选中的消费类型
+6.
+如何将 handbook > index页面计算好的 Object 数据
+传入到 handbook > charts里，并显示出来
 
-17.将handbook>index页面计算好的Object数据传入到handbook>charts里，并显示
+-- handbook > index.js
+   // 跳转到图标页面，携带sumByType和sum数据
+   goToChartsPage: function () {
+     wx.navigateTo({
+       url: '../charts/charts?sumByType=' + JSON.stringify(this.data.sumByType) + '&sum=' + this.data.sum
+     });
+   },
 
---index.js
-  goToChartsPage: function () {
-    wx.navigateTo({
-      url: '../charts/charts?sumByType=' + JSON.stringify(this.data.sumByType)
+-- handbook > charts.js
+  // 获取并更新总 sum 和导航标题
+  onLoad: function (options) {
+    var sum = options.sum; // 解析传递的 sum 参数
+    // 获取上一个页面的导航标题
+    var previousPageTitle = wx.getStorageSync('pageTitle');
+    // 设置当前页面的导航栏标题为上一个页面的导航标题
+    wx.setNavigationBarTitle({
+      title: previousPageTitle,
+    });
+    this.setData({
+      sum: sum,
+      title:previousPageTitle
     });
   },
+   
+  // 页面显示时调用
+  onShow: function () {
+    // 从当前页面的参数中提取 sumByType 数据
+    // 1-获取当前页面栈，包含了所有当前页面的数组
+    var pages = getCurrentPages();
+    // 2-获取了当前页面栈中最后一个页面的实例，即当前页面的实例
+    var currentPage = pages[pages.length - 1];
+    // 3-将传递过来的 JSON 字符串 sumByType 解析为 JavaScript 对象
+    var sumByType = JSON.parse(currentPage.options.sumByType);
+    console.log('charts页面接收到的的sumByType:', sumByType);
 
---charts.wxml
-<view wx:for="{{typelist}}" wx:key="title">
-  <view>{{item.title}}：{{sumByType[item.title]}}元</view>
-</view>
-
---charts.js
-onLoad: function (options) {
-    // 接收传递过来的数据
-    var sumByType = JSON.parse(options.sumByType);
-    console.log('charts页面的sumByType:', sumByType);
-    // 其他逻辑处理，比如绘制饼状图等
-    // 设置数据到页面
     this.setData({
       sumByType: sumByType,
       typelist: typelist
     });
-    this.messureCanvas()
+
+    // 将 sumByType （对象，键是消费类型的ID，值是消费类型标题和总金额）转换为与 dataList 相同的结构（数组，包括消费类型的ID、标题、总金额和背景颜色），并存入 dataList
+    var dataList = [];
+    var colors = this.data.colors;
+    var colorIndex = 0;
+    for (var key in sumByType) {
+      // 判断对象 sumByType 是否具有名为 key 的属性
+      if (sumByType.hasOwnProperty(key)) {
+        var typeid = parseInt(key); // 将 typeid 转换为整数
+        var title = sumByType[key].title; // 获取消费类型名
+        var value = sumByType[key].amount; // 获取消费类型总金额
+        // 将数据添加到 dataList 中
+        dataList.push({
+          typeid: typeid,
+          title: title, // 将消费类型名作为标题
+          value: value, // 将消费总金额作为值
+          background: colors[colorIndex] // 使用预定义的颜色
+        });
+        colorIndex = (colorIndex + 1) % colors.length; // 超出后取余
+      }
+    }
+    console.log('将sumbytype转换后存入dataList', dataList)
+    this.setData({
+      dataList: dataList
+    });
+    // 绘制饼状图
+    this.measureCanvas();
   },
-  
-18. // 检查是否存在相同标题的账本
-    var isDuplicate = rawlist.some(item => item.title === newTitle);
 
-    检查 rawlist 数组中是否存在一个对象，它的 title 属性的值与变量 newTitle 的值相等。如果存在，则 isDuplicate 被赋值为 true，表示存在重复。
-19.
-  <!-- 
-    <modal>模态框组件，用于在页面上显示一个模态对话框
-    modalHidden1 的值为 true 时，模态框隐藏
-    bindconfirm 和 bindcancel 属性分别绑定确认和取消按钮的点击事件处理函数
-    input输入框  name输入框的名称
-    bindblur当用户在输入框输入完内容后，点击 输入框外部 或者 按下"确认" ，
-    导致输入框失去焦点时，就会触发bindblur绑定的事件处理函数
-  -->
+charts页面接收到的的sumByType: 
+111: {title: "购物", amount: 220}
+222: {title: "餐饮", amount: 99}
+333: {title: "交通", amount: 44}
+444: {title: "住宿", amount: 44}
+555: {title: "玩乐", amount: 132}
+666: {title: "其他", amount: 88}
+__proto__: Object
 
-20.wx.setStorageSync(' app.globalData.typelist', aaa)
+将sumbytype转换后存入dataList 
+0: {typeid: 111, title: "购物", value: 220, background: "#ADD8E6"}
+1: {typeid: 222, title: "餐饮", value: 99, background: "#EEB4B4"}
+2: {typeid: 333, title: "交通", value: 44, background: "#B89AF3"}
+3: {typeid: 444, title: "住宿", value: 44, background: "#A3D586"}
+4: {typeid: 555, title: "玩乐", value: 132, background: "#FACA6A"}
+5: {typeid: 666, title: "其他", value: 88, background: "#ACA8A8"}
+length: 6
+nv_length: (...)
+__proto__: Array(0)
+
+
+7.
+wx.setStorageSync('app.globalData.typelist', aaa)
 将数据 aaa 存储在本地缓存中，以键名 'app.globalData.typelist' 作为索引
 这个键名是用单引号括起来的，表示它是一个字符串
 下次需要访问这个数据时，可以通过键名 'app.globalData.typelist' 来从本地缓存中取出数据
 
-21.史上最难:删除消费类型后该类型下的所有消费数据全部删除
+8.史上最难:删除消费类型后该类型下的所有消费数据全部删除
 最开始typelist各个消费类型没有设置唯一的id值，全靠index索引显示
 因为我是一旦修改了消费类型，那么全局的app.global.typelist也会实时更新
 所以前期还是比较丝滑的
 但是在功能：删除消费类型后该类型下的所有消费数据全部删除
 出现后，一切都变了
 删除该消费类型后，本来应该被删除的消费记录不仅没有被删除，他们的消费类型还往后顺延错位了
-尝试了各种办法，比如将要删除的消费数据的消费类型设置为-1，比如var一个新数组，
+尝试了各种办法，比如将要删除的消费数据的消费类型设置为-1；比如var一个新数组，
 用过滤filter保存非该消费类型的其他数据，然后将这个新数组覆盖本地数组
 但是都因为我是按照索引的，仍然会错位
 于是只能给每个消费类型设置唯一的id，刚开始还想了会随机数什么的，后来发现直接用时间戳
@@ -217,13 +164,13 @@ onLoad: function (options) {
 学到了：有些东西可以用index，比如删除的只是当前列表项的数据，而不会牵扯到其他数据；
 有些东西得用id，id可以用时间戳
 
-22.相同日期的消费记录，只显示一次日期
-handbook>index.wxml
+9.相同日期的消费记录，只显示一次日期
+handbook > index.wxml
 <view wx:if="{{item.showDate}}">{{item.date}}</view> 
 表示在 item.showDate 的值为 true 时显示当前记录的日期 item.date，
 item.showDate 的值为 false 时隐藏当前记录的日期
 
-handbook>index.js
+handbook > index.js
      // 判断该日期是否与前一个日期相同
      sublist.forEach(function (item, index) {
        // 第一条数据默认与上一条数据日期不同
@@ -235,10 +182,66 @@ handbook>index.js
        }
      });
 
-23.日期显示格式问题
-刚开始用的是util，自己搞一个包，后来发现多此一举，直接用js自带的即可：
-      // 获取当前日期和时间
-      var currentDate = new Date().toLocaleDateString('en-CA'); // 将日期格式设定为年-月-日
-      var currentTime = new Date().toLocaleTimeString();
-问题出现了，年月日的显示格式会根据各个地区而不同，如美国是月/日/年（而且我的电脑会挂梯子），日期选择器的显示格式是“年-月-日”，这就导致格式不同
-，于是加上('en-CA')，固定显示格式
+10.修改了setting页面的消费类型名，并同时更新了全局的app.globalData.typelist里的typetitle，detail和charts页面的typetitle都因为更新了全局而也自动更新了。但是已提交的消费记录里的typetitle并没有更新
+原因：消费记录sublist的typetitle没有更新
+解决办法：
+     // ----更新 sublist 中的 typetitle
+     // （重命名消费类型名，此页面已有的消费记录的消费类型名也要同时修改）
+     var typelist = app.globalData.typelist;
+     sublist.forEach(function (item) {
+       var typeid = item.typeid;
+       var type = typelist.find(function (type) {
+         return type.typeid === typeid;
+       });
+       if (type) {
+         item.typetitle = type.typetitle;
+       }
+     });
+ find()用来查找数组中满足条件的第一个元素
+ function(type) 定义了一个匿名函数，它接受一个参数 type。在函数体内部，可以使用这个参数来表示数组中的每个元素
+ 在 typelist 数组中查找第一个满足 type.typeid === typeid 条件的元素，并将其赋值给变量 type
+
+11.为什么账本重命名后，该账本下的数据全没了
+寻找原因：在首页index.js用控制台输出rawlist[index]（该账本的数据），发现在该账本新增消费记录后，首页的rawlist[index]并没有更新
+原因：首页index.js下，我将var rawlist = wx.getStorageSync('cashflow') || [];放在最顶上，声明为全局的了，导致下面的数据用的都是旧数据，而没有更新
+解决办法：每次要调用rawlist时就重新声明var rawlist = wx.getStorageSync('cashflow') || [];
+
+12.charts页面
+当消费金额过大时，画面会崩溃，因为数值，百分比位置是固定的，如果数值过大，会于百分比重叠
+解决办法：
+1.数值宽度，小于50，固定百分比位置=标注方块的x坐标+150间距
+2.数值宽度，超过50，则百分比位置=标注方块的x坐标+数值宽度+30间距，使百分比始终位于数值右侧
+但是又有新问题，数值过过过大，超出屏幕宽度，又会全部挤在一起
+3.想到，超过某个金额，则换行，不过由于全部的标注都是在js写的，而不是在wxml，没有盒子，所以比较困难
+新的解决办法：
+金额>百万，显示xxx百万，并保留两位小数
+金额>亿，显示科学计数法，并保留两位小数
+并将所有的百分比都固定位置，因为所有数值宽度都不会太大而于百分比重叠
+ // -----绘制数值
+      // 数值的起始位置
+      var valueTextX = startX + 80;
+      var bigValue = dataList[i].value; // 保存原始值
+      if (bigValue >= 100000000) { // 超过亿，转换成数字类型，用科学计数法，小数点保留后两位
+        bigValue = parseFloat(bigValue).toExponential(2);
+        ctxPie.fillText(bigValue + "元", valueTextX, startY + 15);
+      } else if (bigValue >= 1000000) { // 超过百万
+        bigValue = (bigValue / 1000000).toFixed(2);
+        txPie.fillText(bigValue + '百万', valueTextX, startY + 15);
+      } else {
+        ctxPie.fillText(dataList[i].value + "元", valueTextX, startY + 15);
+      }
+注意不能直接修改dataList[i].value，而要用bigVaule副本保存，因为超百万和亿，会对value进行处理，如果直接修改原本数据，则会导致百分比计算错误；且切换图标后，饼状图可能无法显示
+
+
+13.点击标注内容，对应扇形区域放大
+将标注所有内容都防止wxml，变成盒子，这样果然简单多了
+
+14.detail页面消费类型左右滑动
+       <!-- 按钮左右滑动 -->
+        <scroll-view scroll-x="true" class="scroll-view-container">
+          <view class="weui-cell weui-cell_input weui-cell_type">
+            <view wx:for="{{typelist}}" wx:key="index">
+              <button bindtap="selectType" data-typeid="{{item.typeid}}" class="{{item.selected ? 'selected_button' : ''}}">{{item.typetitle}}</button>
+            </view>
+          </view>
+        </scroll-view>
