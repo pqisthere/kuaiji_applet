@@ -232,9 +232,40 @@ handbook > index.js
       }
 注意不能直接修改dataList[i].value，而要用bigVaule副本保存，因为超百万和亿，会对value进行处理，如果直接修改原本数据，则会导致百分比计算错误；且切换图标后，饼状图可能无法显示
 
+13.不像12.一样把标注写在js里,而是写在wxml，变成盒子，这样果然简单多了
+--实现:点击标注内容，对应扇形区域放大
+绑定handleLegendClick点击事件监听,根据索引重绘饼图
+  // 标注点击事件处理函数
+  handleLegendClick: function (e) {
+    // 获取点击的标注索引
+    var index = e.currentTarget.dataset.index;
+    // 获取上一次点击的索引
+    var lastClickedIndex = this.data.lastClickedIndex;
+    // 判断当前点击的标注是否与上次点击的标注相同
+    if (lastClickedIndex === index) {
+      // 如果相同，则重置 lastClickedIndex 为-1，表示没有扇形被选中
+      index = -1;
+    }
+    // 更新状态中的 lastClickedIndex
+    this.setData({
+      lastClickedIndex: index,
+    });
+    // 重新绘制饼状图
+    this.drawPie();
+  },
 
-13.点击标注内容，对应扇形区域放大
-将标注所有内容都防止wxml，变成盒子，这样果然简单多了
+实现--点击扇形区域,标注变大
+设置动态属性,isTotalPieChart选择"当月消费"或"总账消费";
+lastClickedIndex === index设置选中的标注变大变色
+ <!-- 标注:小方块 类型名 数值 百分比 -->
+  <view class="legend" wx:for="{{isTotalPieChart ? dataList : dataList2}}" wx:key="typeid" bindtap="handleLegendClick" data-index="{{index}}" class="{{lastClickedIndex === index ? 'selected' : ''}}">
+    <view class="label">
+      <view class="color-box" style="background-color: {{colors[index % colors.length]}}"></view>
+      <text> {{item.title}} {{item.percentage}}% </text>
+      <text>{{item.value}}元</text>
+    </view>
+  </view>
+
 
 14.detail页面消费类型左右滑动
        <!-- 按钮左右滑动 -->
@@ -245,3 +276,26 @@ handbook > index.js
             </view>
           </view>
         </scroll-view>
+
+15.头像压缩处理
+background-size属性：
+1. `auto`: 默认值。背景图像保持原始尺寸。
+2. `<length>`: 指定背景图像的宽度和高度，可以使用像素（px）、百分比（%）、视窗宽度（vw）、视窗高度（vh）等单位。
+3. `<percentage>`: 相对于背景容器的百分比。例如，`background-size: 50% 50%;` 表示背景图像宽度和高度均为容器宽度和高度的 50%。
+4. `contain`: 背景图像将尽可能地缩放以完全装入背景容器，同时保持图像的纵横比。图像不会被裁剪
+5. `cover`: 背景图像会被放置在容器内，并尽可能填充整个容器，同时保持图像的纵横比。图像的某些部分可能会被裁剪掉
+6. `initial`: 恢复到默认值。
+7. `inherit`: 继承父元素的值。
+
+这些值可以单独使用，也可以组合使用，用空格分隔，类似于 `background-size: 50% auto;` 或 `background-size: 200px 100px;`。
+
+16.handbook > index 点击复制所有消费记录按钮层级覆盖问题
+bug,写了此代码后,该页面上所有按钮均无法点击(包括预算那里的左右滑动,点击消费记录,新增按钮,饼图按钮)
+  <!-- 复制所有消费记录按钮 -->
+  <movable-area class="export-area">
+    <movable-view class="export-btn" direction="all" out-of-bounds>点击复制所有消费记录</movable-view>
+  </movable-area>
+原因:层级覆盖,我将此代码写在了最底部,覆盖了页面上的其他按钮，导致这些按钮无法点击和滑动
+解决办法:写在最上面
+出现新问题:按钮拖动划过消费记录的时候,被消费记录覆盖了(这个页面实在太丑了)
+解决办法:两个都设相同z-index值

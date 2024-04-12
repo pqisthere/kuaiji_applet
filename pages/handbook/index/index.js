@@ -18,6 +18,50 @@
      date: ""
    },
 
+   // 导出为纯文本文档
+   exportRecord: function () {
+     let textContent = '\t\t\t\t\t\t日期\t\t\t\t\t\t\t类型\t金额\n';
+     this.data.sublist.forEach(function (item) {
+       textContent += item.date + '\t' + item.typetitle + '\t' + item.cost + '\n';
+     });
+
+     // 添加账本总花费和本月各消费类型总花费的信息
+     textContent += '-----------------\n';
+     textContent += '本月总花费：' + this.data.curMonSum + '元\n';
+     textContent += '本月各消费类型总花费：\n';
+     for (let typeid in this.data.monSumByType) {
+       textContent += this.data.monSumByType[typeid].typetitle + '：' + this.data.monSumByType[typeid].curMonAmount + '元\n';
+     }
+     textContent += '-----------------\n';
+     textContent += '此账本总花费：' + this.data.sum + '元\n';
+     textContent += '此账本各消费类型总花费：\n';
+     for (let typeid in this.data.sumByType) {
+       textContent += this.data.sumByType[typeid].typetitle + '：' + this.data.sumByType[typeid].amount + '元\n';
+     }
+
+     // 将文本内容保存到剪贴板
+     wx.setClipboardData({
+       data: textContent,
+       success(res) {
+         // 提示用户导出成功
+         wx.showToast({
+           title: '文本已复制',
+           icon: 'success',
+           duration: 1000
+         });
+       },
+       fail(err) {
+         console.error('复制文本失败', err);
+         // 提示用户导出失败
+         wx.showToast({
+           title: '复制失败',
+           icon: 'none',
+           duration: 1000
+         });
+       }
+     });
+   },
+
    // 监听页面显示：账本名，导航栏标题
    onLoad: function (params) {
      var rawlist = wx.getStorageSync('cashflow') || [];
@@ -272,6 +316,7 @@
      this.onShow();
    },
 
+   // ---------
    // 用户点击右上角分享
    onShareAppMessage: function () {
      return {

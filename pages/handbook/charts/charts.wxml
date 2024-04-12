@@ -20,12 +20,15 @@
     {{isTotalPieChart ? "切换当月" : "切换总账"}}
   </view>
 
-  <view class="legend" wx:for="{{isTotalPieChart ? dataList : dataList2}}" wx:key="typeid" bindtap="handleLegendClick" data-index="{{index}}">
-    <!-- 标注内容 -->
-    <view class="color-box" style="background-color: {{colors[index % colors.length]}}"></view>
-    <text>{{item.title}} {{item.percentage}}% </text>
-    <text> {{item.value}}元</text>
+  <!-- 标注:小方块 类型名 数值 百分比 -->
+  <view class="legend" wx:for="{{isTotalPieChart ? dataList : dataList2}}" wx:key="typeid" bindtap="handleLegendClick" data-index="{{index}}" class="{{lastClickedIndex === index ? 'selected' : ''}}">
+    <view class="label">
+      <view class="color-box" style="background-color: {{colors[index % colors.length]}}"></view>
+      <view class="legend-value overell">
+        <text decode='true'>{{item.title}}&ensp;{{item.percentage}}%&ensp;{{item.value}}元
+        </text>
+      </view>
+    </view>
   </view>
-
 
 </view>

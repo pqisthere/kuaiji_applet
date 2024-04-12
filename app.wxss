@@ -93,6 +93,7 @@ page {
   border-radius: 5px;
   /* 所有属性都会产生过渡效果，过渡持续的时间为0.3秒 */
   transition: all 0.3s;
+  z-index: 2;
 }
 
 /* 重命名:有头像的首页,设置页 */

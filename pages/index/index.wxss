@@ -14,6 +14,7 @@
   margin-top: 70rpx;
   border-radius: 50%;
   background-size: cover;
+  /* 背景图像会被放置在容器内，并尽可能填充整个容器，同时保持图像的纵横比，使图像的任何部分都不会被裁剪掉。如果容器的宽高比与背景图像的宽高比不同，可能会导致背景图像的某些部分无法完全显示。 */
   border: solid 6px #8D86E6;
 }
 

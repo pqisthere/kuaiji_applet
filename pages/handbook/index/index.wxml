@@ -14,10 +14,9 @@
 
   <!-- 页面主体：包括主要内容，删除按钮，新增按钮，图标按钮 -->
   <view class="page-body">
-    <!-- 主要内容区域 -->
 
     <!-- 预算按钮 -->
-    <scroll-view scroll-x="true" class="budget-container overell aljucenter" catchtap="budgetModal">
+    <scroll-view scroll-x class="budget-container overell" catchtap="budgetModal" style="  overflow: unset;">
       {{currentMonth}}月 | 预算
       <text style="color: green;">{{MonBudget}}</text>元
       | 已消费<text style="color: red;">{{curMonSum}}</text>元
@@ -36,6 +35,11 @@
         </input>
       </modal>
     </view>
+
+    <!-- 复制所有消费记录按钮 -->
+    <movable-area class="export-area">
+      <movable-view class="export-btn" direction="all" out-of-bounds bindtap="exportRecord">点击复制所有消费记录</movable-view>
+    </movable-area>
 
     <view class="index-bd">
       <!-- 可滑动区域（详细注解.txt > index）-->
@@ -65,12 +69,11 @@
       </view>
     </view>
 
+
     <!-- 消费类型总金额 -->
-    <view>此为测试用</view>
+    <!-- <view>此为测试用</view>
     <view>
-      <!-- 当月总花费 -->
       <text>本月总花费：{{curMonSum}} 元</text>
-      <!-- 当月各类型总花费 -->
       <view wx:for="{{monSumByType}}" wx:key="typeid1">
         <view>{{item.typetitle}}：{{item.curMonAmount}}元</view>
       </view>
@@ -79,7 +82,7 @@
     <view>共花费：{{sum}}元</view>
     <view wx:for="{{typelist}}" wx:key="typeid2">
       <view>{{item.typetitle}}：{{sumByType[item.typeid].amount}}元</view>
-    </view>
+    </view> -->
 
     <!-- 新增一笔支出按钮 -->
     <view>
@@ -92,6 +95,7 @@
     <view bindtap="goToChartsPage">
       <image class="float-action" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/chart.png"></image>
     </view>
+
 
 
   </view>

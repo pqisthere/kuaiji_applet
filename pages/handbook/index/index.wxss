@@ -1,6 +1,7 @@
 /* 页面头部样式 */
 .page-head {
   display: flex;
+  z-index: 999;
 }
 
 /* 页头的年份，页头标题，预算容器，消费日期 */
@@ -9,6 +10,7 @@
 .budget-container,
 .navigator-time {
   margin: 0 10rpx;
+  z-index: 999;
 }
 
 /* 消费信息整体 */
@@ -16,6 +18,7 @@
   /* border: green 1px solid; */
   display: flex;
   width: 100%;
+  z-index: 1;
 }
 
 /* 消费日期 */
@@ -38,4 +41,27 @@
 /* 消费金额 */
 .navigator-text3 {
   flex: 1;
+}
+
+/* 复制消费记录按钮 */
+.export-area {
+  position: fixed;
+  top: 150rpx;
+  left: 0rpx;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+.export-btn {
+  border-radius: 20rpx;
+  border:rgb(118, 116, 119) 1px solid;
+  width: 175rpx;
+  height: 120rpx;
+  padding: 10rpx;
+}
+
+.export-btn:active {
+  opacity: 0.7;
+  /* 设置点击时的透明度 */
 }
