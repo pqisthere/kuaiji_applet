@@ -9,6 +9,10 @@ page {
   /* border: solid 1px red; */
 }
 
+button {
+  font-size: 35rpx; 
+}
+
 /* 整个页面的容器 */
 .container {
   display: flex;
@@ -67,7 +71,7 @@ page {
   padding-left: 10rpx;
   height: 80rpx;
   background: rgb(240, 239, 239);
-  border-bottom: 0.4px solid rgb(128, 128, 128);
+  border-bottom: 0.8rpx solid rgb(128, 128, 128);
   /* 上下居中 */
   display: flex;
   align-items: center;
@@ -87,10 +91,10 @@ page {
   position: absolute;
   /* 位于父元素的最右侧 */
   right: 0;
-  width: 70px;
+  width: 140rpx;
   height: 100%;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 10rpx;
   /* 所有属性都会产生过渡效果，过渡持续的时间为0.3秒 */
   transition: all 0.3s;
   z-index: 2;
@@ -100,16 +104,16 @@ page {
 .rename {
   background-color: #8D86E6;
   /* 向右移动140px，把重命名按钮藏起来 */
-  transform: translateX(140px);
+  transform: translateX(280rpx);
   /* 位于父元素的最右侧+70px */
-  right: 70px;
+  right: 140rpx;
 }
 
 /* 删除按钮:有头像的首页,账单页,设置页 */
 .del {
   background-color: #E6998D;
   /* 向右移动70px，把删除按钮藏起来 */
-  transform: translateX(70px);
+  transform: translateX(140rpx);
   /* 位于父元素的最右侧 */
   right: 0;
 }
@@ -143,7 +147,7 @@ page {
 }
 
 /* 点击“➕”，图标变透明 */
-.float-action2 :active {
+.float-action2 :hover {
   opacity: 0.7;
   /* 设置透明度，数值范围为0-1，0为完全透明，1为完全不透明
   navigator会自带0.7的透明度，所以只需要设置没有navigator的view的透明度即可 */

@@ -23,7 +23,7 @@
 }
 
 /* 切换总账按钮 */
-.switch:active {
+.switch:hover {
   opacity: 0.7;
   /* 设置点击时的透明度 */
 }

@@ -1,0 +1,57 @@
+<view class="content">
+  <view class="content-head">我 的</view>
+
+  <!-- 输入账号 -->
+  <view class="row">
+    <image src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/nickname.png" class="icon" />
+    <input class="input" name="userName" value="{{userInfo.userName}}" bindinput="inputUserName" placeholder="请输入账号" />
+  </view>
+
+  <!-- 输入密码 -->
+  <view class="row">
+    <image src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/password.png" class="icon" />
+    <input class="name-input" value="{{userInfo.passWord||''}}" bindinput="inputPassWord" type="{{passwordVisible ? 'text' : 'password'}}" placeholder="请输入密码" />
+    <!-- 小眼睛图标按钮 -->
+    <view class="eye-icon-container" bindtap="togglePasswordVisibility">
+      <image class="eye-icon" src="{{passwordVisible ? 'https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/closeeye.png':'https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/openeye.png'}}" />
+    </view>
+  </view>
+</view>
+
+<!-- 登录按钮 -->
+<button class=" button" type="primary" bindtap="login" disabled="{{disableButton}}">登录</button>
+
+<!-- 注册按钮 -->
+<button class="button" type="primary" bindtap="register" disabled="{{disableButton}}">注册</button>
+
+<!-- 修改密码按钮 -->
+<button class="change-button" catchtap="changePasswordModal" disabled="{{!disableButton}}" wx:if="{{disableButton}}">修改密码</button>
+
+<!-- 修改密码弹窗 -->
+<view>
+  <modal title="修改密码" hidden="{{modalHidden}}" confirm-text="确定" cancel-text="取消" bindconfirm="changePasswordModalConfirm" bindcancel="changePasswordModalCancel">
+    <input name='newPassword' bindblur="handleBlur" value="{{newPassword}}">
+    </input>
+  </modal>
+</view>
+
+<!-- 去首页按钮 -->
+<navigator url="/pages/index/index" wx:if="{{disableButton}}">
+  <button class="back-button" disabled="{{!disableButton}}">去首页</button>
+</navigator>
+
+<!-- 退出登录按钮 -->
+<button class="logout-button" bindtap="logout" wx:if="{{disableButton}}">退出登录</button>
+
+<!-- 注销按钮 -->
+<button class="unregister-button" bindtap="unregister" wx:if="{{disableButton}}">注销账号</button>
+
+<!-- <van-button type="primary">主要按钮</van-button> -->
+
+<!-- <van-container title="5列-展示分割线"> -->
+<!-- <van-grid
+    items="{{ items5 }}"
+    bind:tap="handleTapItem"
+    columns="{{ 5 }}"
+    showDivider /> -->
+<!-- </van-container> -->

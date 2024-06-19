@@ -100,5 +100,21 @@ map和foreach区别
 map：有返回值，会生成新数组，不改变原数组
 foreach：与map全部相反
 
+，，，11
+  inputUserName(e) {
+    // 解构赋值：从对象 e.detail 中提取属性 value 的值，并将其赋给变量 value
+    const {
+      value
+    } = e.detail;
+    console.log('输入的userName：', value);
+    this.setData({
+      'userInfo.userName': value
+    });
+  },
+
+  ，，，12
+  <input name='title' bindblur="setTitle" value="{{temptitle}}">
+  当用户在输入框中输入完成并且焦点移出输入框时，会触发 blur 事件，从而调用绑定的 setTitle 函数。
+
 
 

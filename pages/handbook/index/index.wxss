@@ -43,7 +43,7 @@
   flex: 1;
 }
 
-/* 复制消费记录按钮 */
+/* 复制消费记录的区域 */
 .export-area {
   position: fixed;
   top: 150rpx;
@@ -53,15 +53,29 @@
   z-index: 1;
 }
 
+/* 复制消费记录按钮 */
 .export-btn {
   border-radius: 20rpx;
-  border:rgb(118, 116, 119) 1px solid;
+  border: rgb(118, 116, 119) 1px solid;
   width: 175rpx;
   height: 120rpx;
   padding: 10rpx;
 }
 
-.export-btn:active {
+.export-btn:hover {
   opacity: 0.7;
   /* 设置点击时的透明度 */
+}
+
+/* 记账总笔数 */
+.total-count-container{
+  font-size: 30rpx;
+  height: 20rpx;
+  color: #7a7a80;
+}
+.total-count {
+  color: rgb(80, 80, 32);
+  font-weight: bold;
+  font-size: 50rpx;
+  margin: 0 10rpx;
 }

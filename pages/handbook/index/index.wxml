@@ -41,9 +41,12 @@
       <movable-view class="export-btn" direction="all" out-of-bounds bindtap="exportRecord">点击复制所有消费记录</movable-view>
     </movable-area>
 
+    <!-- 记账总笔数 -->
+    <view class="aljucenter total-count-container">记账总笔数<span class="total-count">{{ totalCount }}</span>记账总天数<span class="total-count">{{totalDay}}</span></view>
+
     <view class="index-bd">
       <!-- 可滑动区域（详细注解.txt > index）-->
-      <view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{sublist}}" wx:key="id">
+      <view class="{{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{items}}" wx:key="id">
         <!-- 消费日期，item.showDate 为 true，则显示日期，否则不显示 -->
         <view class="navigator-time" wx:if="{{item.showDate}}">
           <view>{{item.date}}</view>
@@ -55,7 +58,6 @@
           <!-- 消费信息-->
           <view class="navigator-text">
             <!-- 消费类型 -->
-            <!-- <view class="navigator-text1">{{typelist[item.typeid].typetitle}}</view> -->
             <view class="navigator-text1">{{item.typetitle}}</view>
             <!-- 消费名称 -->
             <view class="navigator-text2  overell">{{item.subtitle}}</view>

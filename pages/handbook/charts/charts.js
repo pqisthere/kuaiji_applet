@@ -12,7 +12,7 @@ Page({
     isTotalPieChart: false, // 默认显示当前月消费类型饼状图
     canvasInfo: {}, // 画布信息
     dataList: [], // 将 sumByType 和 monSumBytype 的数据转换格式后放在这里
-    dataList2: [], // 将monSumBytype 的数据转换格式后放在这里
+    dataList2: [], // 将 monSumBytype 的数据转换格式后放在这里
     pieInfo: {}, // 饼状图
     sumByType: {}, // 按消费类型分类的账本总额
     monSumByType: {}, // 按消费类型分类的当月总额
@@ -189,9 +189,8 @@ Page({
     this.drawPie(index);
   },
 
-  // 绘制饼图和标注
+  // 绘制饼图
   drawPie(index) {
-    // 创建画布上下文
     const ctxPie = wx.createCanvasContext("pieCanvas");
     var canvasInfo = this.data.canvasInfo;
     // 根据标志位选择要绘制的数据
@@ -236,53 +235,6 @@ Page({
       ctxPie.fill();
       ctxPie.closePath();
     };
-
-    // ----绘制标注
-    // for (var i = 0; i < dataList.length; i++) {
-    //   var startX = 50;
-    //   var startY = 280 + i * 35; // 35是标注之间的距离
-    //   if (lastClickedIndex === i) {
-    //     startX += 5; // 标注放大时，向右移动一点
-    //     startY += 5; // 标注放大时，向下移动一点
-    //   }
-    //   ctxPie.fillStyle = dataList[i].background; // 填充标注左边小方块的颜色
-    //   ctxPie.fillRect(startX, startY, 20, 20);
-
-    //   // 查找对应的消费类型标题
-    //   var title = '';
-    //   for (var j = 0; j < typelist.length; j++) {
-    //     if (typelist[j].typeid == dataList[i].typeid) {
-    //       title = dataList[i].title;
-    //       break;
-    //     }
-    //   }
-    //   ctxPie.fillStyle = '#8a8a8a'; // 标注字体颜色
-    //   ctxPie.font = '17rpx sans-serif'; // 标注字体
-    //   ctxPie.fillText(title, startX + 25, startY + 15); // 标题
-
-    //   // -----绘制数值
-    //   // 数值的起始位置
-    //   var valueTextX = startX + 70;
-    //   var bigValue = dataList[i].value; // 保存原始值
-    //   if (bigValue >= 100000000) { // 超过亿，转换成数字类型，用科学计数法，小数点保留后两位
-    //     bigValue = parseFloat(bigValue).toExponential(2);
-    //     ctxPie.fillText(bigValue + "元", valueTextX, startY + 15);
-    //   } else if (bigValue >= 10000) { // 超过万
-    //     bigValue = (bigValue / 10000).toFixed(2);
-    //     ctxPie.fillText(bigValue + '万', valueTextX, startY + 15);
-    //   } else {
-    //     ctxPie.fillText(dataList[i].value + "元", valueTextX, startY + 15);
-    //   }
-
-    //   // ----绘制百分比
-    //   var percentage = parseFloat(dataList[i].value * 100 / totalValue);
-    //   var percentageText = Math.floor(percentage * 100) / 100 + "%";
-
-    //   var percentageTextX = 0;
-    //   percentageTextX = startX + 160;
-    //   ctxPie.fillText(percentageText, percentageTextX, startY + 15);
-    // }
-
     // 存储每个扇形的角度信息
     pieInfo.area = area;
     this.data.pieInfo = pieInfo;

@@ -2,8 +2,14 @@
   "appid": "wx10f3a0557cda8433",
   "compileType": "miniprogram",
   "libVersion": "3.3.4",
+  "cloudfunctionRoot": "pages/cloud/",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "value": "/minitest",
+        "type": "folder"
+      }
+    ],
     "include": []
   },
   "setting": {
@@ -13,7 +19,13 @@
     "minified": true,
     "enhance": true,
     "showShadowRootInWxmlPanel": true,
-    "packNpmRelationList": [],
+    "packNpmManually": true,
+    "packNpmRelationList": [
+      {
+        "packageJsonPath": "./package.json",
+        "miniprogramNpmDistDir": "./"
+      }
+    ],
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -29,5 +41,6 @@
   },
   "dependencies": {
     "uuid-js": "^0.7.5"
-  }
+  },
+  "testRoot": "minitest/"
 }

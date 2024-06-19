@@ -2,6 +2,7 @@
 .page-section {
   /* border: blueviolet 1px solid; */
   padding-left: 30rpx;
+  /* font-size: 25rpx; */
 }
 
 /* 设置“消费了啥” */
@@ -41,7 +42,7 @@
 .weui-cell_type {
   /* border: solid 1px black; */
   display: flex;
-  height: 220rpx;
+  /* height: 220rpx; */
 }
 
 /* 地图 */

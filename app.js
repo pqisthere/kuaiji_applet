@@ -2,7 +2,15 @@
 
 App({
   //小程序初始化完成时触发，调用API从本地缓存中获取数据
-  onLaunch: function () {},
+  onLaunch: function () {
+    // 清除本地缓存的用户信息
+    wx.removeStorageSync('userInfo');
+    // 初始化云开发环境
+    wx.cloud.init({
+      env: 'kuaijizhang-6gcgnrb110c61495', // 你的环境ID
+      traceUser: true,
+    });
+  },
   //获取用户的信息
   getUserInfo: function (cb) {
     var that = this
@@ -22,7 +30,11 @@ App({
       })
     }
   },
+
   globalData: {
+    userInfo: null,
+    loggedInUserName: null,
+    rawlist: [], // 保存全局数据的数组，用于存储账本数据
     typelist: [{
         typeid: 111,
         typetitle: '购物',

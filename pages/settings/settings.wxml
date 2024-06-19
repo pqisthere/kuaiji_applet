@@ -38,6 +38,7 @@
 
       </view>
     </view>
+    
     <!-- 新增按钮 -->
     <view bindtap="showModal">
       <image class="float-action2" src="https://env-00jxgn6qwwy9.normal.cloudstatic.cn/imag/add.png"></image>

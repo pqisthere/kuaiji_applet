@@ -37,7 +37,8 @@ Page({
   },
 
   // 监听页面加载，可获取页面跳转时传递的参数 params
-  onLoad: function (params) {
+  onLoad: function (params) {    
+    console.log('typelist',typelist)
     if (params.act == 'new') { // 新建：更新默认选中消费类型
       for (let i = 1; i < typelist.length; i++) {
         typelist[i].selected = false;
@@ -207,7 +208,6 @@ Page({
     var rawlist = wx.getStorageSync('cashflow') || [];
     var typeTitle = this.getTypeTitle(this.data.typeid);
     console.log("表单提交的经纬度:", this.data.longitude, this.data.latitude);
-
     if (this.data.act == 'new') { // 新增，就 push 进去
       // e.detail.value 是事件对象 e 中的一个属性，用于获取事件触发时输入框中的值
       // 下面的信息看起来是重复的，但其实每个数据都不一样
@@ -224,9 +224,11 @@ Page({
         // e.detail.value 获取用户在表单中输入的值
         // this.data 页面的 data 对象中存储的数据
       };
-      if (!rawlist[this.data.mainindex]) {
-        rawlist[this.data.mainindex] = { items: [] }; // 不存在，则初始化为空
-      }      
+      if (!rawlist[this.data.mainindex].items) {
+        rawlist[this.data.mainindex] = {
+          items: []
+        }; // 不存在，则初始化为空
+      }
       // 将新消费记录添加到现金流数据中
       rawlist[this.data.mainindex].items.push(newExpense);
     } else { // 编辑，更新已有的数据
@@ -261,11 +263,13 @@ Page({
 
     // 获取、添加、提交表单数据
     // 添加是因为默认“只会”携带用户“输入的数据”，而“不会”携带页面中“其他的数据”
+    var userName = app.globalData.loggedInUserName; // 获取当前用户的userName
     var formData = e.detail.value;
     formData.mainindex = this.data.mainindex;
     formData.typeid = this.data.typeid;
     formData.typetitle = typeTitle;
     formData.location = this.data.longitude + ',' + this.data.latitude;
+    formData.userName = userName;
     console.log('提交了一则支出信息到本地缓存：', formData);
 
     wx.setStorageSync('cashflow', rawlist); // 将现金流数据保存在本地缓存中
@@ -274,7 +278,6 @@ Page({
     // 播放音效
     audioCtx.src = 'https://env-00jxgn6qwwy9.normal.cloudstatic.cn/audio/%E6%8F%90%E4%BA%A4.mp3';
     audioCtx.play();
-
     // 退回上一页
     wx.navigateBack({
       delta: 1, // 要返回的页面数
